@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: openapi/delphi-openapi.yml
+docs: https://docs.delphi.ai/advanced/actions/api-immortal-only
+summary:
+  types:
+  - apiKey
+  api_key_in:
+  - header
+notes: >-
+  Delphi uses a single API-key scheme (no OAuth, no scopes). Every request
+  carries an x-api-key header. The key is scoped to a single clone — it can
+  only interact with conversations and users belonging to that clone. API
+  access is available on the Immortal plan; keys are provisioned by Delphi
+  (email support@delphi.ai) and shown only once. Webhook deliveries are
+  authenticated separately with an HMAC signing secret (see asyncapi/).
+schemes:
+- name: ApiKeyAuth
+  type: apiKey
+  in: header
+  parameter: x-api-key
+  clone_scoped: true
+  provisioning: Immortal plan; request from support@delphi.ai (shown once)
+  docs: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  description: API key scoped to a single clone. Available on the Immortal plan; request one
+    from support@delphi.ai.
+  sources:
+  - openapi/delphi-openapi.yml
