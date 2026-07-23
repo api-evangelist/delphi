@@ -1,0 +1,104 @@
+openapi: 3.1.0
+info:
+  title: Delphi Audience Clone API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the per-resource reference pages (audience, conversations, clone, questions, tags, usage, voice, search). Hand-built from the published REST reference; Delphi does not publish a machine-readable OpenAPI.
+  description: The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+- url: https://api.delphi.ai
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Clone
+  description: Retrieve your clone's public profile information.
+paths:
+  /v3/clone:
+    get:
+      operationId: getClone
+      tags:
+      - Clone
+      summary: Get clone profile
+      description: Retrieve your clone's public profile information.
+      responses:
+        '200':
+          description: Clone profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clone:
+                    $ref: '#/components/schemas/Clone'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  responses:
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    Clone:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+        slug:
+          type: string
+        description:
+          type:
+          - string
+          - 'null'
+        headline:
+          type:
+          - string
+          - 'null'
+        purpose:
+          type:
+          - string
+          - 'null'
+        tags:
+          type: array
+          items:
+            type: string
+        imageUrl:
+          type:
+          - string
+          - 'null'
+        initial_message:
+          type:
+          - string
+          - 'null'
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.

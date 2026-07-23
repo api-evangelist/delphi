@@ -1,0 +1,379 @@
+openapi: 3.1.0
+info:
+  title: Delphi Audience API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the per-resource reference pages (audience, conversations, clone, questions, tags, usage, voice, search). Hand-built from the published REST reference; Delphi does not publish a machine-readable OpenAPI.
+  description: The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+- url: https://api.delphi.ai
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Audience
+  description: Store and manage contextual information about users in your audience.
+paths:
+  /v3/users:
+    get:
+      operationId: listUsers
+      tags:
+      - Audience
+      summary: List users
+      description: Retrieve a paginated list of all users in your audience. Uses opaque cursor pagination.
+      parameters:
+      - name: limit
+        in: query
+        schema:
+          type: integer
+          minimum: 1
+          maximum: 1000
+          default: 50
+        description: Page size (1-1000, default 50)
+      - name: cursor
+        in: query
+        schema:
+          type: string
+        description: Cursor from previous response's next_cursor
+      - name: active
+        in: query
+        schema:
+          type: boolean
+        description: Filter by active (true) or revoked (false) status
+      responses:
+        '200':
+          description: Paginated list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/User'
+                  next_cursor:
+                    type:
+                    - string
+                    - 'null'
+                  has_more:
+                    type: boolean
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/users/lookup:
+    post:
+      operationId: lookupUser
+      tags:
+      - Audience
+      summary: Lookup user
+      description: Find a user by email or phone number. Exactly one of email or phone_number must be provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                phone_number:
+                  type: string
+                  description: Phone number in E.164 format
+            example:
+              email: fan@example.com
+      responses:
+        '200':
+          description: Matched user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  email:
+                    type:
+                    - string
+                    - 'null'
+                  phone_number:
+                    type:
+                    - string
+                    - 'null'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/users/{user_id}/info:
+    post:
+      operationId: createUserInfo
+      tags:
+      - Audience
+      summary: Create user info
+      description: Add a piece of contextual information about a user. This data is embedded into your clone's memory to personalize responses.
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - info
+              - info_type
+              properties:
+                info:
+                  type: string
+                  description: The information text
+                info_type:
+                  $ref: '#/components/schemas/InfoType'
+            example:
+              info: Wants to improve their public speaking skills
+              info_type: GOAL
+      responses:
+        '200':
+          description: Info item created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    get:
+      operationId: getUserInfo
+      tags:
+      - Audience
+      summary: Get user info
+      description: Retrieve all stored information for a user, sorted newest first.
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Stored info for the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id:
+                    type: string
+                  info_items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/UserInfoItem'
+                  total_count:
+                    type: integer
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/users/{user_id}/info/{info_id}:
+    patch:
+      operationId: updateUserInfo
+      tags:
+      - Audience
+      summary: Update user info
+      description: Update a specific piece of information about a user. At least one of info or info_type must be provided. The created_at timestamp is preserved.
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: info_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                info:
+                  type: string
+                info_type:
+                  $ref: '#/components/schemas/InfoType'
+      responses:
+        '200':
+          description: Info item updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInfoItem'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+    delete:
+      operationId: deleteUserInfo
+      tags:
+      - Audience
+      summary: Delete user info
+      description: Remove a specific piece of information about a user.
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: info_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Info item deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  message:
+                    type: string
+                  deleted_info_id:
+                    type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    InfoType:
+      type: string
+      description: Category of a user info item embedded into clone memory.
+      enum:
+      - GOAL
+      - PREFERENCES
+      - INTERESTS
+      - PERSONAL_INFO
+      - EXPERTISE
+      - SITUATION
+      - BELIEF
+      - COMMUNICATION_STYLE
+      - EMOTIONAL_STATE
+      - RELATIONSHIP
+      - WHY_DELPHI
+      - HOW_DELPHI
+      - JOURNAL
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    UserInfoItem:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        message_id:
+          type:
+          - string
+          - 'null'
+        source:
+          type: string
+          example: API
+        info_type:
+          $ref: '#/components/schemas/InfoType'
+    User:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: UUID of the user
+        email:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone_number:
+          type:
+          - string
+          - 'null'
+          description: E.164 format
+        tags:
+          type: array
+          items:
+            type: string
+        tier:
+          type: string
+          enum:
+          - PUBLIC
+          - INTERNAL
+          - PRIVATE
+        active:
+          type: boolean
+        date_joined:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.

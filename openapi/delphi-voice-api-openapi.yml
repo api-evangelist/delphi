@@ -1,0 +1,147 @@
+openapi: 3.1.0
+info:
+  title: Delphi Audience Voice API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the per-resource reference pages (audience, conversations, clone, questions, tags, usage, voice, search). Hand-built from the published REST reference; Delphi does not publish a machine-readable OpenAPI.
+  description: The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+- url: https://api.delphi.ai
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Voice
+  description: Stream voice responses and synthesize speech as real-time PCM audio.
+paths:
+  /v3/voice/stream:
+    post:
+      operationId: streamVoiceResponse
+      tags:
+      - Voice
+      summary: Stream voice response
+      description: Send a text message and receive the clone's response as a real-time raw PCM audio stream (24kHz, 16-bit, mono). Requires a configured voice and an existing conversation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - conversation_id
+              - message
+              properties:
+                conversation_id:
+                  type: string
+                  description: UUID of an existing conversation
+                message:
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+            example:
+              conversation_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+              message: What are your thoughts on AI safety?
+      responses:
+        '200':
+          description: Raw PCM audio stream (X-Audio-Format pcm_24000_16_mono)
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/voice/synthesize:
+    post:
+      operationId: synthesizeVoice
+      tags:
+      - Voice
+      summary: Synthesize voice
+      description: Convert raw text to audio using your clone's configured voice. Unlike voice stream, this speaks the exact text provided without generating a clone response.
+      parameters:
+      - name: stream
+        in: query
+        schema:
+          type: boolean
+          default: false
+        description: Stream raw PCM bytes instead of JSON
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - text
+              properties:
+                text:
+                  type: string
+                  minLength: 1
+                  maxLength: 10000
+            example:
+              text: Hello, this is a test of the synthesis endpoint.
+      responses:
+        '200':
+          description: Base64 PCM (JSON) or raw PCM stream (when stream=true)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audio:
+                    type: string
+                    description: base64-encoded raw PCM (24kHz
+                    16-bit: null
+                    mono): null
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  responses:
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.

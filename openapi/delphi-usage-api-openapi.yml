@@ -1,0 +1,141 @@
+openapi: 3.1.0
+info:
+  title: Delphi Audience Usage API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the per-resource reference pages (audience, conversations, clone, questions, tags, usage, voice, search). Hand-built from the published REST reference; Delphi does not publish a machine-readable OpenAPI.
+  description: The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+- url: https://api.delphi.ai
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Usage
+  description: Track consumption metrics and access tiers for your users.
+paths:
+  /v3/users/{user_id}/usage:
+    get:
+      operationId: getUserUsage
+      tags:
+      - Usage
+      summary: Get user usage
+      description: Retrieve usage metrics for a specific user, including quotas and remaining allowances for the current billing period.
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Usage metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Usage'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/users/{user_id}/tier:
+    get:
+      operationId: getUserTier
+      tags:
+      - Usage
+      summary: Get user tier
+      description: Retrieve the current access tier for a specific user. Defaults to "JUST ME" if no custom tier has been assigned.
+      parameters:
+      - name: user_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: User tier
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tier:
+                    type: string
+                    example: GROWTH
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    UsageCounters:
+      type: object
+      properties:
+        messages:
+          type: integer
+        voice_seconds:
+          type: number
+        video_seconds:
+          type: number
+    Usage:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start:
+              type: string
+              format: date-time
+            end:
+              type: string
+              format: date-time
+            days_remaining:
+              type: integer
+        quota:
+          $ref: '#/components/schemas/UsageCounters'
+        usage:
+          $ref: '#/components/schemas/UsageCounters'
+        remaining:
+          $ref: '#/components/schemas/UsageCounters'
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.

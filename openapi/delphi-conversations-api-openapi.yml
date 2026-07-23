@@ -1,0 +1,401 @@
+openapi: 3.1.0
+info:
+  title: Delphi Audience Conversations API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the per-resource reference pages (audience, conversations, clone, questions, tags, usage, voice, search). Hand-built from the published REST reference; Delphi does not publish a machine-readable OpenAPI.
+  description: The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+- url: https://api.delphi.ai
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Conversations
+  description: Create conversations, stream responses, view history, and manage conversation lifecycle.
+paths:
+  /v3/conversation:
+    post:
+      operationId: createConversation
+      tags:
+      - Conversations
+      summary: Create a conversation
+      description: Start a new conversation with your clone. Returns a conversation ID and the clone's initial greeting.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_email:
+                  type: string
+                  description: Email of the user starting the chat. If omitted, an anonymous conversation is created.
+            example:
+              user_email: user@example.com
+      responses:
+        '200':
+          description: Conversation created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ConversationCreated'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/stream:
+    post:
+      operationId: streamResponse
+      tags:
+      - Conversations
+      summary: Stream a response
+      description: Send a message and receive the clone's response as a real-time stream of Server-Sent Events. The stream ends with a [DONE] event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - conversation_id
+              - message
+              properties:
+                conversation_id:
+                  type: string
+                  description: UUID of the conversation
+                message:
+                  type: string
+                  description: The user's message
+                file_urls:
+                  type: array
+                  items:
+                    type: string
+                  description: URLs of user-uploaded files for context
+                slug:
+                  type: string
+                  description: Your clone's slug
+            example:
+              conversation_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+              message: What are your top 3 tips for getting started?
+      responses:
+        '200':
+          description: Server-Sent Events stream of response chunks
+          content:
+            text/event-stream:
+              schema:
+                type: string
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/conversation/list:
+    get:
+      operationId: listConversations
+      tags:
+      - Conversations
+      summary: List conversations
+      description: Retrieve all conversations for a specific user, sorted newest first. Only active (non-deleted) conversations are returned.
+      parameters:
+      - name: email
+        in: query
+        required: true
+        schema:
+          type: string
+        description: The user's email address
+      responses:
+        '200':
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ConversationSummary'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/conversation/{conversation_id}/history:
+    get:
+      operationId: getConversationHistory
+      tags:
+      - Conversations
+      summary: Get conversation history
+      description: Retrieve the full message history for a conversation, in chronological order (oldest first).
+      parameters:
+      - name: conversation_id
+        in: path
+        required: true
+        schema:
+          type: string
+        description: UUID of the conversation
+      - name: include_citations
+        in: query
+        required: false
+        schema:
+          type: boolean
+          default: false
+        description: Include source citations
+      responses:
+        '200':
+          description: Conversation message history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/conversation/{conversation_id}/title:
+    put:
+      operationId: updateConversationTitle
+      tags:
+      - Conversations
+      summary: Update conversation title
+      description: Set or update the title of a conversation.
+      parameters:
+      - name: conversation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - title
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  description: New title (1-500 characters)
+            example:
+              title: Getting started tips
+      responses:
+        '200':
+          description: Title updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id:
+                    type: string
+                  title:
+                    type: string
+                  updated_at:
+                    type: string
+                    format: date-time
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/conversation/{conversation_id}/append-clone-message:
+    post:
+      operationId: appendCloneMessage
+      tags:
+      - Conversations
+      summary: Append a clone message
+      description: Add a clone message to an existing conversation. Useful for seeding conversations or injecting a custom clone message mid-conversation.
+      parameters:
+      - name: conversation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - text
+              properties:
+                text:
+                  type: string
+                  minLength: 1
+                  maxLength: 50000
+                  description: Message text (1-50,000 characters)
+            example:
+              text: Welcome! Here are some things you can ask me about.
+      responses:
+        '200':
+          description: Clone message appended
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Message'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/conversation/{conversation_id}:
+    delete:
+      operationId: deleteConversation
+      tags:
+      - Conversations
+      summary: Delete a conversation
+      description: Soft-delete a conversation. It will no longer appear in list results; the conversation is hidden, not permanently removed.
+      parameters:
+      - name: conversation_id
+        in: path
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Conversation archived
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status:
+                    type: string
+                    example: archived
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        sender:
+          type: string
+          enum:
+          - CLONE
+          - USER
+        created_at:
+          type: string
+          format: date-time
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+    Citation:
+      type: object
+      properties:
+        url:
+          type: string
+        text:
+          type: string
+        type:
+          type: string
+          enum:
+          - WEB
+          - PDF
+          - TWITTER
+        title:
+          type:
+          - string
+          - 'null'
+        page_num:
+          type:
+          - number
+          - 'null'
+        timestamp:
+          type:
+          - number
+          - 'null'
+        tweet_id:
+          type:
+          - string
+          - 'null'
+        citation_url:
+          type:
+          - string
+          - 'null'
+    ConversationSummary:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type:
+          - string
+          - 'null'
+        created_at:
+          type: string
+          format: date-time
+        medium:
+          type: string
+          example: API
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    ConversationCreated:
+      type: object
+      properties:
+        conversation_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        initial_message:
+          type: string
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.

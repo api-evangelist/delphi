@@ -1,0 +1,206 @@
+openapi: 3.1.0
+info:
+  title: Delphi Audience Search API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the per-resource reference pages (audience, conversations, clone, questions, tags, usage, voice, search). Hand-built from the published REST reference; Delphi does not publish a machine-readable OpenAPI.
+  description: The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+- url: https://api.delphi.ai
+  description: Production
+security:
+- ApiKeyAuth: []
+tags:
+- name: Search
+  description: Search your clone's digital mind for relevant chunks or content.
+paths:
+  /v3/search/query:
+    post:
+      operationId: searchQuery
+      tags:
+      - Search
+      summary: Search chunks
+      description: Search for relevant passages from your clone's digital mind. Supports semantic search, keyword/phrase (BM25) matching, and optional scoping to specific content sources. Powers custom search, RAG pipelines, and content discovery.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: array
+                  items:
+                    type: string
+                  description: Semantic search strings (questions or topics)
+                keywords:
+                  type: array
+                  items:
+                    type: string
+                  description: Keyword/phrase strings for exact-match (BM25) boosting
+                content:
+                  type: array
+                  items:
+                    type: string
+                  description: Content descriptions to scope results to matching sources
+                contentIds:
+                  type: array
+                  items:
+                    type: string
+                  description: Direct content IDs to filter results
+                limit:
+                  type: integer
+                  minimum: 1
+                  maximum: 50
+                  default: 10
+                tag:
+                  type: string
+                  description: Access tier tag (e.g. PUBLIC
+                  PREMIUM): null
+            example:
+              query:
+              - What is your advice on building a startup?
+              keywords:
+              - fundraising
+              - Series A
+              limit: 5
+      responses:
+        '200':
+          description: Matching chunks and their content sources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chunks:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Chunk'
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Content'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+  /v3/search/content:
+    post:
+      operationId: searchContent
+      tags:
+      - Search
+      summary: Search content sources
+      description: Search for content sources (documents, articles, podcasts) in the knowledge base by title or description. Use to discover available content before a chunk search.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+              - query
+              properties:
+                query:
+                  type: array
+                  items:
+                    type: string
+                tag:
+                  type: string
+            example:
+              query:
+              - fundraising
+              - startup advice
+      responses:
+        '200':
+          description: Matching content sources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Content'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimited'
+components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+  schemas:
+    Content:
+      type: object
+      properties:
+        contentId:
+          type: string
+        title:
+          type: string
+        contentType:
+          type: string
+          description: e.g. podcast, article, pdf, video
+        summary:
+          type:
+          - string
+          - 'null'
+        metaData:
+          type: object
+        createdTime:
+          type: string
+          format: date-time
+        editedTime:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    Chunk:
+      type: object
+      properties:
+        text:
+          type: string
+        sources:
+          type: array
+          items:
+            type: object
+            properties:
+              contentId:
+                type: string
+              title:
+                type: string
+        createdTime:
+          type: string
+          format: date-time
+        editedTime:
+          type: string
+          format: date-time
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.
