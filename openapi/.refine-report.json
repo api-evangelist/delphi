@@ -1,0 +1,28 @@
+{
+  "provider": "delphi",
+  "sources": [
+    "delphi-audience-api-openapi.yml",
+    "delphi-clone-api-openapi.yml",
+    "delphi-conversations-api-openapi.yml",
+    "delphi-questions-api-openapi.yml",
+    "delphi-search-api-openapi.yml",
+    "delphi-tags-api-openapi.yml",
+    "delphi-usage-api-openapi.yml",
+    "delphi-voice-api-openapi.yml"
+  ],
+  "outputs": [
+    "delphi-audience-api-openapi.yml",
+    "delphi-clone-api-openapi.yml",
+    "delphi-conversations-api-openapi.yml",
+    "delphi-questions-api-openapi.yml",
+    "delphi-search-api-openapi.yml",
+    "delphi-tags-api-openapi.yml",
+    "delphi-usage-api-openapi.yml",
+    "delphi-voice-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

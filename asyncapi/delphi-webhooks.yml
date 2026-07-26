@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.delphi.ai/advanced/actions/webhooks
+spec_type: Webhooks
+description: >-
+  Delphi documents an outbound webhook surface (Actions → Webhooks) but does not
+  publish a machine-readable AsyncAPI document. This captures the webhook event
+  catalog verbatim. Delivery is at-least-once (dedupe on the unique event id).
+delivery:
+  transport: HTTPS POST to a subscriber endpoint URL (must be https://)
+  authentication: HMAC signing secret, shown once on first webhook creation; rotatable with a 72-hour overlap
+  guarantee: at-least-once (duplicates possible; each delivery carries a unique event id)
+  retries: up to 12 attempts with growing backoff; endpoint has 60s to respond
+  health: after 5 consecutive failures the endpoint is paused as "unhealthy" until re-enabled
+  log_retention: delivery records (request + response) kept for 7 days
+  filters: per-event Simple (tag ANY/ALL, or specific alerts) or Advanced expression filters
+events:
+  - name: Thread Session Ended
+    fires_when: A conversation has settled and the full session is ready to fetch.
+  - name: Visitor Message Sent
+    fires_when: A visitor sent a message in chat. The only event that carries the actual message text.
+  - name: Contact Created
+    fires_when: A new contact was created from an import, the API, or conversation capture.
+  - name: Contact Updated
+    fires_when: A contact's profile, tags, or custom properties changed.
+  - name: Contact Deleted
+    fires_when: A contact was removed from the owner account.
+  - name: Alert Triggered
+    fires_when: An alert's condition matched a conversation.
+  - name: Affiliate Product Mentioned
+    fires_when: An affiliate product was recommended in an assistant message.
+  - name: Phone Number Captured
+    fires_when: A linked contact gained a phone number.
+  - name: Contact Became Inactive
+    fires_when: A contact crossed a whole-day inactivity threshold that you set.
+common_targets: [Zapier, Make, Slack, HubSpot, custom endpoints]

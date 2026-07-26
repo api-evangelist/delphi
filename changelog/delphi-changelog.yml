@@ -1,0 +1,35 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.delphi.ai/recent-updates/readme.md
+description: >-
+  Delphi publishes a dated product Recent Updates log (GitBook "updates"
+  format). It covers the product surface (which includes the Actions/Webhooks
+  API area); there is no separately versioned API changelog. This captures the
+  recent window; the live log is the source of truth.
+docs: https://docs.delphi.ai/recent-updates
+versioning:
+  scheme: dated product updates (not a semver API changelog)
+  api_version: v3
+entries:
+  - date: '2026-06-29'
+    title: Workflow upgrades and product polish
+    highlights:
+      - Actions now centers on Webhooks and Hosted Actions; the workflow Builder view was removed.
+      - Alerts now covers part of what Actions handled before.
+      - Products and Voice pages updated; Change Ownership renamed to Change Email.
+      - Interview mode deprecated.
+  - date: '2026-05-14'
+    title: Unified Navigation
+    highlights:
+      - All tabs are now accessible via a unified side-bar.
+  - date: '2026-04-20'
+    title: New upload methods in Add Knowledge
+    highlights:
+      - Add files from Granola and Obsidian (Files & Notes) with sync.
+      - Add videos from Loom or Vimeo by pasting the URL.
+  - date: '2026-03-28'
+    title: Settings Updates
+    highlights:
+      - Mind Settings renamed to Response Settings and moved to the Settings page.
+      - Voice now lives under Response Settings.
+      - Disclaimer Messages moved to Integrations.

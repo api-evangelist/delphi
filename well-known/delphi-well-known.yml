@@ -1,0 +1,20 @@
+generated: '2026-07-18'
+method: searched
+source: live probe of /.well-known/* on delphi.ai and docs.delphi.ai
+note: >-
+  No /.well-known/ discovery documents are published on either host. All probes
+  returned 404. Recorded as a negative result (absence is valid data); no
+  WellKnown pointer is wired into apis.yml because nothing was found. A verbatim
+  llms.txt IS published at https://docs.delphi.ai/llms.txt and is captured in
+  llms/delphi-llms.txt.
+hosts:
+  - host: https://delphi.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }
+      - { path: /.well-known/openid-configuration, status: 404 }
+      - { path: /.well-known/oauth-authorization-server, status: 404 }
+      - { path: /.well-known/api-catalog, status: 404 }
+      - { path: /.well-known/ai-plugin.json, status: 404 }
+  - host: https://docs.delphi.ai
+    documents:
+      - { path: /.well-known/security.txt, status: 404 }

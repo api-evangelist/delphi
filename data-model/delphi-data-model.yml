@@ -1,0 +1,89 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/delphi-openapi.yml ($ref graph + id-reference fields) enriched from the resource reference pages
+description: >-
+  Entity-relationship graph for the Delphi v3 API, derived from the OpenAPI
+  schemas and the id-reference fields that link them. A single API key is scoped
+  to one Clone; everything below belongs to that clone.
+entities:
+  - name: Clone
+    description: The Digital Mind (AI clone). Root scope of an API key.
+    id_field: id
+    schema: Clone
+  - name: User
+    description: A member of the clone's audience (a contact).
+    id_field: user_id
+    id_hint: 'u-…'
+    schema: User
+  - name: UserInfoItem
+    description: A piece of contextual info about a user, embedded into clone memory.
+    id_field: id
+    id_hint: 'info-…'
+    schema: UserInfoItem
+  - name: Conversation
+    description: A chat session between a user (or anonymous) and the clone.
+    id_field: id
+    schema: ConversationSummary
+  - name: Message
+    description: A single message within a conversation (sender CLONE or USER).
+    id_field: id
+    id_hint: 'msg-…'
+    schema: Message
+  - name: Tag
+    description: A label used to organize the audience.
+    id_field: id
+    id_hint: 'tag-…'
+    schema: Tag
+  - name: Question
+    description: A suggested conversation-starter configured for the clone.
+    id_field: id
+    id_hint: 'q-…'
+    schema: Question
+  - name: Content
+    description: A knowledge-base content source (podcast, article, pdf, video) the clone is trained on.
+    id_field: contentId
+    schema: Content
+  - name: Chunk
+    description: A retrievable passage from a Content source (search/RAG result).
+    schema: Chunk
+relationships:
+  - from: Clone
+    to: User
+    type: has_many
+    via: audience
+  - from: Clone
+    to: Tag
+    type: has_many
+    via: tags
+  - from: Clone
+    to: Question
+    type: has_many
+    via: questions
+  - from: Clone
+    to: Content
+    type: has_many
+    via: knowledge base
+  - from: User
+    to: Conversation
+    type: has_many
+    via: user_email
+  - from: User
+    to: UserInfoItem
+    type: has_many
+    via: user_id
+  - from: User
+    to: Tag
+    type: has_many
+    via: tags (user.tags[] / users/{user_id}/tags/{tag_name})
+  - from: Conversation
+    to: Message
+    type: has_many
+    via: conversation_id
+  - from: Message
+    to: Citation
+    type: has_many
+    via: citations
+  - from: Chunk
+    to: Content
+    type: belongs_to
+    via: sources[].contentId

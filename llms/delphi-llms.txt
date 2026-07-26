@@ -1,0 +1,62 @@
+# Delphi Help Center
+
+## Home
+
+- [Home](https://docs.delphi.ai/home.md): Welcome to your team’s developer platform
+
+## The Basics
+
+- [Edit Your Profile](https://docs.delphi.ai/the-basics/edit-your-profile.md)
+- [Add Content & Train Mind](https://docs.delphi.ai/the-basics/add-content-and-train-mind.md)
+- [Voice Calling](https://docs.delphi.ai/the-basics/voice-calling.md)
+- [Audience, Conversations, Insights & Analytics](https://docs.delphi.ai/the-basics/audience-conversations-insights-and-analytics.md)
+- [Settings](https://docs.delphi.ai/the-basics/settings.md)
+- [Data, Privacy, & Security](https://docs.delphi.ai/the-basics/data-privacy-and-security.md): Your Knowledge, Your Control
+- [Common FAQs](https://docs.delphi.ai/the-basics/common-faqs.md): Common Questions about your Delphi
+
+## Advanced
+
+- [Pro Voice](https://docs.delphi.ai/advanced/pro-voice.md)
+- [Integrations](https://docs.delphi.ai/advanced/integrations.md)
+- [Broadcasts](https://docs.delphi.ai/advanced/broadcasts.md)
+- [Products](https://docs.delphi.ai/advanced/products.md)
+- [Usage Limits](https://docs.delphi.ai/advanced/usage-limits.md)
+- [Response Settings](https://docs.delphi.ai/advanced/response-settings.md)
+- [Mind Score](https://docs.delphi.ai/advanced/mind-score.md)
+- [Actions](https://docs.delphi.ai/advanced/actions.md)
+- [API (Immortal Only)](https://docs.delphi.ai/advanced/actions/api-immortal-only.md): Build custom integrations with your Delphi using the REST API.
+- [Audience](https://docs.delphi.ai/advanced/actions/api-immortal-only/audience.md): Store and retrieve contextual information about users in your audience. This data is embedded into your clone's memory, allowing it to personalize responses based on what you know about each user.
+- [Conversations](https://docs.delphi.ai/advanced/actions/api-immortal-only/conversations.md)
+- [Clone](https://docs.delphi.ai/advanced/actions/api-immortal-only/clone.md): Retrieve your clone's public profile information.
+- [Questions](https://docs.delphi.ai/advanced/actions/api-immortal-only/questions.md)
+- [Tags](https://docs.delphi.ai/advanced/actions/api-immortal-only/tags.md)
+- [Usage](https://docs.delphi.ai/advanced/actions/api-immortal-only/usage.md)
+- [Voice](https://docs.delphi.ai/advanced/actions/api-immortal-only/voice.md): Stream voice responses from your clone as raw PCM audio.
+- [Search](https://docs.delphi.ai/advanced/actions/api-immortal-only/search.md): Search your clone's digital mind for relevant chunks or content. Use these endpoints to power custom search experiences, RAG pipelines, or content discovery features.
+- [Webhooks](https://docs.delphi.ai/advanced/actions/webhooks.md)
+- [Activity](https://docs.delphi.ai/advanced/actions/activity.md)
+- [Hosted Actions](https://docs.delphi.ai/advanced/actions/hosted-actions.md)
+
+## Chat with a Delphi
+
+- [Chat with a Delphi](https://docs.delphi.ai/chat-with-a-delphi/chat-with-a-delphi.md)
+
+## Recent Updates
+
+- [Recent Updates](https://docs.delphi.ai/recent-updates/readme.md): New updates and improvements
+
+
+---
+
+# Agent Instructions
+This documentation is published with GitBook. GitBook is the documentation platform designed so that both humans and AI agents can read, navigate, and reason over technical content effectively. Learn more at gitbook.com.
+
+## Querying This Documentation
+If you need additional information, you can query the documentation dynamically by asking a question.
+Perform an HTTP GET request on a page URL with the `ask` query parameter:
+```
+GET https://docs.delphi.ai/home.md?ask=<question>
+```
+The question should be specific, self-contained, and written in natural language.
+The response will contain a direct answer to the question and relevant excerpts and sources from the documentation.
+Use this mechanism when the answer is not explicitly present in the current page, you need clarification or additional context, or you want to retrieve related documentation sections.

@@ -1,0 +1,27 @@
+generated: '2026-07-18'
+method: searched
+source: >-
+  https://docs.delphi.ai/advanced/actions/api-immortal-only,
+  https://docs.delphi.ai/recent-updates/readme.md, and https://status.delphi.ai
+versioning:
+  scheme: uri-path
+  current: v3
+  docs: https://docs.delphi.ai/advanced/actions/api-immortal-only
+deprecation:
+  policy_url: null
+  sunset_header: false
+  note: >-
+    No formal API deprecation policy or RFC 8594 Sunset/Deprecation header
+    support is documented. Product-level deprecations are announced in the
+    dated Recent Updates log (e.g. Interview mode and the workflow Builder view
+    were deprecated in the 2026-06-29 release).
+sla:
+  url: null
+  uptime_target: null
+  note: No public SLA / uptime target is published.
+status_page: https://status.delphi.ai
+rate_limits:
+  limit: 120 requests per 60 seconds per API key
+  exceed_response: 429
+changelog: changelog/delphi-changelog.yml
+deprecated_operations: []

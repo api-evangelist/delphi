@@ -1,0 +1,40 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Delphi
+  version: 1.0.0
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: openapi/delphi-openapi.yml
+extends: openapi/delphi-openapi.yml
+actions:
+  - target: $.info
+    update:
+      x-apievangelist-enriched: true
+      x-apievangelist-notes: >-
+        Spec hand-built by API Evangelist from the published Delphi REST
+        reference (docs.delphi.ai); Delphi does not ship a machine-readable
+        OpenAPI. Auth is a single clone-scoped x-api-key header (Immortal plan).
+      x-rate-limit:
+        requests: 120
+        window_seconds: 60
+        scope: per-api-key
+        exceed_status: 429
+  - target: $.info
+    update:
+      x-artifacts:
+        authentication: authentication/delphi-authentication.yml
+        conventions: conventions/delphi-conventions.yml
+        errors: errors/delphi-problem-types.yml
+        lifecycle: lifecycle/delphi-lifecycle.yml
+        webhooks: asyncapi/delphi-webhooks.yml
+        data_model: data-model/delphi-data-model.yml
+  - target: $.paths['/v3/search/query'].post
+    update:
+      x-use-case: RAG / custom search over the clone's knowledge base
+  - target: $.paths['/v3/stream'].post
+    update:
+      x-streaming: server-sent-events
+  - target: $.paths['/v3/voice/stream'].post
+    update:
+      x-streaming: raw-pcm-audio

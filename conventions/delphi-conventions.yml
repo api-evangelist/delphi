@@ -1,0 +1,76 @@
+generated: '2026-07-18'
+method: searched
+source: >-
+  https://docs.delphi.ai/advanced/actions/api-immortal-only and the per-resource
+  reference pages — the cross-cutting request/response semantics that apply
+  across the Delphi v3 API, not any single operation.
+description: >-
+  How the Delphi API behaves across every operation: authentication style,
+  API versioning, cursor pagination, streaming (SSE + raw PCM), rate-limit
+  signaling, idempotency posture, and the error envelope. These are the
+  developer-experience / runtime-semantics conventions that OpenAPI does not
+  fully express.
+base_url: https://api.delphi.ai
+api_style: REST over HTTPS, JSON request/response; streaming responses via SSE and raw PCM
+
+authentication:
+  scheme: API key in the x-api-key header
+  clone_scoped: true
+  oauth: false
+  docs: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  detail: authentication/delphi-authentication.yml
+
+versioning:
+  scheme: uri-path
+  current: v3
+  detail: lifecycle/delphi-lifecycle.yml
+
+pagination:
+  style: cursor
+  applies_to: GET /v3/users (audience list)
+  request_params:
+    limit: 1-1000, default 50
+    cursor: opaque cursor from the previous response's next_cursor
+  response_fields:
+    next_cursor: pass as cursor to fetch the next page (null when no more results)
+    has_more: boolean — whether additional pages exist
+  note: The cursor is opaque — do not parse or construct it manually.
+
+streaming:
+  text:
+    endpoint: POST /v3/stream
+    format: text/event-stream (Server-Sent Events)
+    terminator: "[DONE] event ends the stream"
+  voice:
+    endpoints: [POST /v3/voice/stream, "POST /v3/voice/synthesize?stream=true"]
+    format: raw PCM audio (application/octet-stream)
+    audio_format: pcm_24000_16_mono (24kHz, 16-bit signed, mono, little-endian)
+    headers: [X-Audio-Format, X-Audio-Sample-Rate, X-Audio-Bits-Per-Sample, X-Audio-Channels]
+
+idempotency:
+  key_header_supported: false
+  note: >-
+    Delphi does not document a request-level Idempotency-Key header. However,
+    two mutations are idempotent by design: tagging a user (POST
+    /v3/users/{user_id}/tags/{tag_name}) and untagging (DELETE …) both succeed
+    without error when the tag is already present/absent. Conversation delete is
+    a soft delete (archived). Retries of non-idempotent POSTs (e.g. createUserInfo)
+    may create duplicates.
+
+rate_limiting:
+  limit: 120 requests per 60 seconds per API key
+  scope: applied across all endpoints
+  exceed_response: 429 Too Many Requests
+  detail: lifecycle/delphi-lifecycle.yml
+
+error_envelope:
+  shape: JSON body with an "error" message field
+  format: not RFC 9457 problem+json
+  statuses_observed: [401, 403, 404, 409, 429]
+  detail: errors/delphi-problem-types.yml
+
+webhooks:
+  supported: true
+  signing: HMAC signing secret (rotatable, 72h overlap)
+  delivery: at-least-once, up to 12 retries, 60s response window; paused after 5 consecutive failures
+  detail: asyncapi/delphi-webhooks.yml

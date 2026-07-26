@@ -1,0 +1,16 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/delphi-openapi.yml
+skills:
+  - file: delphi-converse-with-clone.md
+    name: Converse with a Delphi Digital Mind
+    api: openapi/delphi-openapi.yml
+    operations: [createConversation, streamResponse, getConversationHistory, updateConversationTitle]
+  - file: delphi-manage-audience.md
+    name: Manage a Delphi audience and its memory
+    api: openapi/delphi-openapi.yml
+    operations: [lookupUser, listUsers, createUserInfo, getUserInfo, createTag, tagUser, getUserUsage]
+  - file: delphi-search-knowledge.md
+    name: Search a Delphi digital mind for RAG
+    api: openapi/delphi-openapi.yml
+    operations: [searchContent, searchQuery]

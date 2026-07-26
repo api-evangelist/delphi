@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: derived
+source: >-
+  openapi/delphi-openapi.yml (4xx/5xx responses) enriched from
+  https://docs.delphi.ai/advanced/actions/api-immortal-only (Authentication,
+  Rate limits) and the tags/conversations reference pages.
+format: json-error-message
+envelope:
+  shape: 'JSON object with a single "error" string field'
+  note: >-
+    Delphi returns a plain JSON error message, not RFC 9457
+    application/problem+json. Status code carries the machine-readable class.
+problems:
+  - status: 401
+    title: Unauthorized
+    meaning: Missing or invalid x-api-key header.
+    remediation: Include a valid API key in the x-api-key header on every request.
+    source_operation: all operations
+  - status: 403
+    title: Forbidden
+    meaning: The API key is valid but not permitted for the requested clone/resource (keys are clone-scoped).
+    remediation: Use a key scoped to the clone that owns the resource.
+    source_operation: clone-scoped operations
+  - status: 404
+    title: Not Found
+    meaning: The referenced conversation, user, info item, or tag does not exist.
+    remediation: Verify the resource id; conversations that were soft-deleted are hidden from list.
+    source_operation: openapi/delphi-openapi.yml#getConversationHistory
+  - status: 409
+    title: Conflict
+    meaning: A tag with the same name already exists for this clone.
+    remediation: Use a unique tag name, or list existing tags first (GET /v3/tags).
+    source_operation: openapi/delphi-openapi.yml#createTag
+  - status: 429
+    title: Too Many Requests
+    meaning: Rate limit exceeded — 120 requests per 60 seconds per API key.
+    remediation: Back off and retry after the window; rate limiting is applied across all endpoints.
+    source_operation: all operations

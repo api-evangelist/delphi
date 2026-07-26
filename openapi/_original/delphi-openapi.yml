@@ -1,0 +1,968 @@
+openapi: 3.1.0
+info:
+  title: Delphi API
+  version: v3
+  x-provenance:
+    generated: '2026-07-18'
+    method: generated
+    source: >-
+      https://docs.delphi.ai/advanced/actions/api-immortal-only.md and the
+      per-resource reference pages (audience, conversations, clone, questions,
+      tags, usage, voice, search). Hand-built from the published REST reference;
+      Delphi does not publish a machine-readable OpenAPI.
+  description: >-
+    The Delphi API lets you integrate your Digital Mind (an AI clone trained on
+    your content) directly into your own app, platform, or workflow. Create
+    conversations, stream text and voice responses, manage your audience and its
+    contextual memory, organize contacts with tags, search your clone's
+    knowledge base for RAG, and track per-user usage. API access is available on
+    the Immortal plan. All endpoints authenticate with an API key passed in the
+    x-api-key header and are scoped to a single clone.
+  contact:
+    name: Delphi Support
+    email: support@delphi.ai
+    url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  termsOfService: https://delphi.ai/terms
+servers:
+  - url: https://api.delphi.ai
+    description: Production
+security:
+  - ApiKeyAuth: []
+tags:
+  - name: Conversations
+    description: Create conversations, stream responses, view history, and manage conversation lifecycle.
+  - name: Audience
+    description: Store and manage contextual information about users in your audience.
+  - name: Clone
+    description: Retrieve your clone's public profile information.
+  - name: Questions
+    description: Retrieve suggested questions configured for your clone.
+  - name: Tags
+    description: Create tags and organize your audience.
+  - name: Usage
+    description: Track consumption metrics and access tiers for your users.
+  - name: Voice
+    description: Stream voice responses and synthesize speech as real-time PCM audio.
+  - name: Search
+    description: Search your clone's digital mind for relevant chunks or content.
+paths:
+  /v3/conversation:
+    post:
+      operationId: createConversation
+      tags: [Conversations]
+      summary: Create a conversation
+      description: Start a new conversation with your clone. Returns a conversation ID and the clone's initial greeting.
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                user_email:
+                  type: string
+                  description: Email of the user starting the chat. If omitted, an anonymous conversation is created.
+            example:
+              user_email: user@example.com
+      responses:
+        '200':
+          description: Conversation created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/ConversationCreated' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/stream:
+    post:
+      operationId: streamResponse
+      tags: [Conversations]
+      summary: Stream a response
+      description: Send a message and receive the clone's response as a real-time stream of Server-Sent Events. The stream ends with a [DONE] event.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [conversation_id, message]
+              properties:
+                conversation_id: { type: string, description: UUID of the conversation }
+                message: { type: string, description: The user's message }
+                file_urls:
+                  type: array
+                  items: { type: string }
+                  description: URLs of user-uploaded files for context
+                slug: { type: string, description: Your clone's slug }
+            example:
+              conversation_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+              message: What are your top 3 tips for getting started?
+      responses:
+        '200':
+          description: Server-Sent Events stream of response chunks
+          content:
+            text/event-stream:
+              schema: { type: string }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/conversation/list:
+    get:
+      operationId: listConversations
+      tags: [Conversations]
+      summary: List conversations
+      description: Retrieve all conversations for a specific user, sorted newest first. Only active (non-deleted) conversations are returned.
+      parameters:
+        - name: email
+          in: query
+          required: true
+          schema: { type: string }
+          description: The user's email address
+      responses:
+        '200':
+          description: List of conversations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  conversations:
+                    type: array
+                    items: { $ref: '#/components/schemas/ConversationSummary' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/conversation/{conversation_id}/history:
+    get:
+      operationId: getConversationHistory
+      tags: [Conversations]
+      summary: Get conversation history
+      description: Retrieve the full message history for a conversation, in chronological order (oldest first).
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema: { type: string }
+          description: UUID of the conversation
+        - name: include_citations
+          in: query
+          required: false
+          schema: { type: boolean, default: false }
+          description: Include source citations
+      responses:
+        '200':
+          description: Conversation message history
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items: { $ref: '#/components/schemas/Message' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/conversation/{conversation_id}/title:
+    put:
+      operationId: updateConversationTitle
+      tags: [Conversations]
+      summary: Update conversation title
+      description: Set or update the title of a conversation.
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title]
+              properties:
+                title:
+                  type: string
+                  minLength: 1
+                  maxLength: 500
+                  description: New title (1-500 characters)
+            example:
+              title: Getting started tips
+      responses:
+        '200':
+          description: Title updated
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  id: { type: string }
+                  title: { type: string }
+                  updated_at: { type: string, format: date-time }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/conversation/{conversation_id}/append-clone-message:
+    post:
+      operationId: appendCloneMessage
+      tags: [Conversations]
+      summary: Append a clone message
+      description: Add a clone message to an existing conversation. Useful for seeding conversations or injecting a custom clone message mid-conversation.
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text:
+                  type: string
+                  minLength: 1
+                  maxLength: 50000
+                  description: Message text (1-50,000 characters)
+            example:
+              text: Welcome! Here are some things you can ask me about.
+      responses:
+        '200':
+          description: Clone message appended
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Message' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/conversation/{conversation_id}:
+    delete:
+      operationId: deleteConversation
+      tags: [Conversations]
+      summary: Delete a conversation
+      description: Soft-delete a conversation. It will no longer appear in list results; the conversation is hidden, not permanently removed.
+      parameters:
+        - name: conversation_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Conversation archived
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string, example: archived }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users:
+    get:
+      operationId: listUsers
+      tags: [Audience]
+      summary: List users
+      description: Retrieve a paginated list of all users in your audience. Uses opaque cursor pagination.
+      parameters:
+        - name: limit
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 1000, default: 50 }
+          description: Page size (1-1000, default 50)
+        - name: cursor
+          in: query
+          schema: { type: string }
+          description: Cursor from previous response's next_cursor
+        - name: active
+          in: query
+          schema: { type: boolean }
+          description: Filter by active (true) or revoked (false) status
+      responses:
+        '200':
+          description: Paginated list of users
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  users:
+                    type: array
+                    items: { $ref: '#/components/schemas/User' }
+                  next_cursor: { type: [string, 'null'] }
+                  has_more: { type: boolean }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users/lookup:
+    post:
+      operationId: lookupUser
+      tags: [Audience]
+      summary: Lookup user
+      description: Find a user by email or phone number. Exactly one of email or phone_number must be provided.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email: { type: string }
+                phone_number: { type: string, description: Phone number in E.164 format }
+            example:
+              email: fan@example.com
+      responses:
+        '200':
+          description: Matched user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id: { type: string }
+                  email: { type: [string, 'null'] }
+                  phone_number: { type: [string, 'null'] }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users/{user_id}/info:
+    post:
+      operationId: createUserInfo
+      tags: [Audience]
+      summary: Create user info
+      description: Add a piece of contextual information about a user. This data is embedded into your clone's memory to personalize responses.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [info, info_type]
+              properties:
+                info: { type: string, description: The information text }
+                info_type: { $ref: '#/components/schemas/InfoType' }
+            example:
+              info: Wants to improve their public speaking skills
+              info_type: GOAL
+      responses:
+        '200':
+          description: Info item created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserInfoItem' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+    get:
+      operationId: getUserInfo
+      tags: [Audience]
+      summary: Get user info
+      description: Retrieve all stored information for a user, sorted newest first.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Stored info for the user
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  user_id: { type: string }
+                  info_items:
+                    type: array
+                    items: { $ref: '#/components/schemas/UserInfoItem' }
+                  total_count: { type: integer }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users/{user_id}/info/{info_id}:
+    patch:
+      operationId: updateUserInfo
+      tags: [Audience]
+      summary: Update user info
+      description: Update a specific piece of information about a user. At least one of info or info_type must be provided. The created_at timestamp is preserved.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: info_id
+          in: path
+          required: true
+          schema: { type: string }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                info: { type: string }
+                info_type: { $ref: '#/components/schemas/InfoType' }
+      responses:
+        '200':
+          description: Info item updated
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/UserInfoItem' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+    delete:
+      operationId: deleteUserInfo
+      tags: [Audience]
+      summary: Delete user info
+      description: Remove a specific piece of information about a user.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: info_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Info item deleted
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success: { type: boolean }
+                  message: { type: string }
+                  deleted_info_id: { type: string }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/clone:
+    get:
+      operationId: getClone
+      tags: [Clone]
+      summary: Get clone profile
+      description: Retrieve your clone's public profile information.
+      responses:
+        '200':
+          description: Clone profile
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  clone: { $ref: '#/components/schemas/Clone' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/questions:
+    get:
+      operationId: getQuestions
+      tags: [Questions]
+      summary: Get questions
+      description: Retrieve the suggested questions (conversation starters) configured for your clone.
+      parameters:
+        - name: type
+          in: query
+          schema: { type: string, enum: [pinned, unpinned, all], default: pinned }
+          description: Filter by pinned, unpinned, or all questions
+        - name: count
+          in: query
+          schema: { type: integer, minimum: 1, maximum: 100, default: 5 }
+          description: Number of questions to return (1-100)
+        - name: randomize
+          in: query
+          schema: { type: boolean, default: false }
+          description: Return questions in random order
+      responses:
+        '200':
+          description: Suggested questions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  questions:
+                    type: array
+                    items: { $ref: '#/components/schemas/Question' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/tags:
+    post:
+      operationId: createTag
+      tags: [Tags]
+      summary: Create a tag
+      description: Create a new tag for organizing your audience. Returns 409 if a tag with the same name already exists.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name]
+              properties:
+                name: { type: string, description: Tag name (must be unique per clone) }
+                color: { type: string, default: default }
+            example:
+              name: VIP
+              color: blue
+      responses:
+        '200':
+          description: Tag created
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Tag' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '409': { $ref: '#/components/responses/Conflict' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+    get:
+      operationId: listTags
+      tags: [Tags]
+      summary: List all tags
+      description: Retrieve all tags for your clone, sorted newest first.
+      responses:
+        '200':
+          description: List of tags
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tags:
+                    type: array
+                    items: { $ref: '#/components/schemas/Tag' }
+                  total_count: { type: integer }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users/{user_id}/tags/{tag_name}:
+    post:
+      operationId: tagUser
+      tags: [Tags]
+      summary: Tag a user
+      description: Apply a tag to a user in your audience. Idempotent — tagging a user who already has the tag succeeds without error.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: tag_name
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Tag applied
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagMutation' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+    delete:
+      operationId: untagUser
+      tags: [Tags]
+      summary: Untag a user
+      description: Remove a tag from a user. Idempotent — untagging a user who doesn't have the tag succeeds without error.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+        - name: tag_name
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Tag removed
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/TagMutation' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users/{user_id}/usage:
+    get:
+      operationId: getUserUsage
+      tags: [Usage]
+      summary: Get user usage
+      description: Retrieve usage metrics for a specific user, including quotas and remaining allowances for the current billing period.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: Usage metrics
+          content:
+            application/json:
+              schema: { $ref: '#/components/schemas/Usage' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/users/{user_id}/tier:
+    get:
+      operationId: getUserTier
+      tags: [Usage]
+      summary: Get user tier
+      description: Retrieve the current access tier for a specific user. Defaults to "JUST ME" if no custom tier has been assigned.
+      parameters:
+        - name: user_id
+          in: path
+          required: true
+          schema: { type: string }
+      responses:
+        '200':
+          description: User tier
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  tier: { type: string, example: GROWTH }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/voice/stream:
+    post:
+      operationId: streamVoiceResponse
+      tags: [Voice]
+      summary: Stream voice response
+      description: Send a text message and receive the clone's response as a real-time raw PCM audio stream (24kHz, 16-bit, mono). Requires a configured voice and an existing conversation.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [conversation_id, message]
+              properties:
+                conversation_id: { type: string, description: UUID of an existing conversation }
+                message: { type: string, minLength: 1, maxLength: 10000 }
+            example:
+              conversation_id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+              message: What are your thoughts on AI safety?
+      responses:
+        '200':
+          description: Raw PCM audio stream (X-Audio-Format pcm_24000_16_mono)
+          content:
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '404': { $ref: '#/components/responses/NotFound' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/voice/synthesize:
+    post:
+      operationId: synthesizeVoice
+      tags: [Voice]
+      summary: Synthesize voice
+      description: Convert raw text to audio using your clone's configured voice. Unlike voice stream, this speaks the exact text provided without generating a clone response.
+      parameters:
+        - name: stream
+          in: query
+          schema: { type: boolean, default: false }
+          description: Stream raw PCM bytes instead of JSON
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [text]
+              properties:
+                text: { type: string, minLength: 1, maxLength: 10000 }
+            example:
+              text: Hello, this is a test of the synthesis endpoint.
+      responses:
+        '200':
+          description: Base64 PCM (JSON) or raw PCM stream (when stream=true)
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  audio: { type: string, description: base64-encoded raw PCM (24kHz, 16-bit, mono) }
+            application/octet-stream:
+              schema: { type: string, format: binary }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/search/query:
+    post:
+      operationId: searchQuery
+      tags: [Search]
+      summary: Search chunks
+      description: Search for relevant passages from your clone's digital mind. Supports semantic search, keyword/phrase (BM25) matching, and optional scoping to specific content sources. Powers custom search, RAG pipelines, and content discovery.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: array
+                  items: { type: string }
+                  description: Semantic search strings (questions or topics)
+                keywords:
+                  type: array
+                  items: { type: string }
+                  description: Keyword/phrase strings for exact-match (BM25) boosting
+                content:
+                  type: array
+                  items: { type: string }
+                  description: Content descriptions to scope results to matching sources
+                contentIds:
+                  type: array
+                  items: { type: string }
+                  description: Direct content IDs to filter results
+                limit: { type: integer, minimum: 1, maximum: 50, default: 10 }
+                tag: { type: string, description: Access tier tag (e.g. PUBLIC, PREMIUM) }
+            example:
+              query: ["What is your advice on building a startup?"]
+              keywords: ["fundraising", "Series A"]
+              limit: 5
+      responses:
+        '200':
+          description: Matching chunks and their content sources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  chunks:
+                    type: array
+                    items: { $ref: '#/components/schemas/Chunk' }
+                  content:
+                    type: array
+                    items: { $ref: '#/components/schemas/Content' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+  /v3/search/content:
+    post:
+      operationId: searchContent
+      tags: [Search]
+      summary: Search content sources
+      description: Search for content sources (documents, articles, podcasts) in the knowledge base by title or description. Use to discover available content before a chunk search.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [query]
+              properties:
+                query:
+                  type: array
+                  items: { type: string }
+                tag: { type: string }
+            example:
+              query: ["fundraising", "startup advice"]
+      responses:
+        '200':
+          description: Matching content sources
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items: { $ref: '#/components/schemas/Content' }
+        '401': { $ref: '#/components/responses/Unauthorized' }
+        '429': { $ref: '#/components/responses/RateLimited' }
+components:
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: x-api-key
+      description: API key scoped to a single clone. Available on the Immortal plan; request one from support@delphi.ai.
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    Conflict:
+      description: Resource already exists (e.g. duplicate tag name)
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema: { $ref: '#/components/schemas/Error' }
+  schemas:
+    Error:
+      type: object
+      properties:
+        error: { type: string, description: Error message }
+    InfoType:
+      type: string
+      description: Category of a user info item embedded into clone memory.
+      enum:
+        - GOAL
+        - PREFERENCES
+        - INTERESTS
+        - PERSONAL_INFO
+        - EXPERTISE
+        - SITUATION
+        - BELIEF
+        - COMMUNICATION_STYLE
+        - EMOTIONAL_STATE
+        - RELATIONSHIP
+        - WHY_DELPHI
+        - HOW_DELPHI
+        - JOURNAL
+    ConversationCreated:
+      type: object
+      properties:
+        conversation_id: { type: string }
+        created_at: { type: string, format: date-time }
+        initial_message: { type: string }
+    ConversationSummary:
+      type: object
+      properties:
+        id: { type: string }
+        title: { type: [string, 'null'] }
+        created_at: { type: string, format: date-time }
+        medium: { type: string, example: API }
+    Message:
+      type: object
+      properties:
+        id: { type: string }
+        text: { type: string }
+        sender: { type: string, enum: [CLONE, USER] }
+        created_at: { type: string, format: date-time }
+        citations:
+          type: array
+          items: { $ref: '#/components/schemas/Citation' }
+    Citation:
+      type: object
+      properties:
+        url: { type: string }
+        text: { type: string }
+        type: { type: string, enum: [WEB, PDF, TWITTER] }
+        title: { type: [string, 'null'] }
+        page_num: { type: [number, 'null'] }
+        timestamp: { type: [number, 'null'] }
+        tweet_id: { type: [string, 'null'] }
+        citation_url: { type: [string, 'null'] }
+    User:
+      type: object
+      properties:
+        user_id: { type: string, description: UUID of the user }
+        email: { type: [string, 'null'] }
+        name: { type: [string, 'null'] }
+        phone_number: { type: [string, 'null'], description: E.164 format }
+        tags:
+          type: array
+          items: { type: string }
+        tier: { type: string, enum: [PUBLIC, INTERNAL, PRIVATE] }
+        active: { type: boolean }
+        date_joined: { type: string, format: date-time }
+    UserInfoItem:
+      type: object
+      properties:
+        id: { type: string }
+        text: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+        message_id: { type: [string, 'null'] }
+        source: { type: string, example: API }
+        info_type: { $ref: '#/components/schemas/InfoType' }
+    Clone:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        slug: { type: string }
+        description: { type: [string, 'null'] }
+        headline: { type: [string, 'null'] }
+        purpose: { type: [string, 'null'] }
+        tags:
+          type: array
+          items: { type: string }
+        imageUrl: { type: [string, 'null'] }
+        initial_message: { type: [string, 'null'] }
+    Question:
+      type: object
+      properties:
+        id: { type: string }
+        index: { type: integer }
+        question: { type: string }
+        pinned: { type: boolean }
+        user_edited: { type: boolean }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    Tag:
+      type: object
+      properties:
+        id: { type: string }
+        name: { type: string }
+        color: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    TagMutation:
+      type: object
+      properties:
+        success: { type: boolean }
+        tag_id: { type: string }
+        tag_name: { type: string }
+        user_id: { type: string }
+        message: { type: string }
+    Usage:
+      type: object
+      properties:
+        period:
+          type: object
+          properties:
+            start: { type: string, format: date-time }
+            end: { type: string, format: date-time }
+            days_remaining: { type: integer }
+        quota: { $ref: '#/components/schemas/UsageCounters' }
+        usage: { $ref: '#/components/schemas/UsageCounters' }
+        remaining: { $ref: '#/components/schemas/UsageCounters' }
+    UsageCounters:
+      type: object
+      properties:
+        messages: { type: integer }
+        voice_seconds: { type: number }
+        video_seconds: { type: number }
+    Chunk:
+      type: object
+      properties:
+        text: { type: string }
+        sources:
+          type: array
+          items:
+            type: object
+            properties:
+              contentId: { type: string }
+              title: { type: string }
+        createdTime: { type: string, format: date-time }
+        editedTime: { type: string, format: date-time }
+    Content:
+      type: object
+      properties:
+        contentId: { type: string }
+        title: { type: string }
+        contentType: { type: string, description: 'e.g. podcast, article, pdf, video' }
+        summary: { type: [string, 'null'] }
+        metaData: { type: object }
+        createdTime: { type: string, format: date-time }
+        editedTime: { type: string, format: date-time }

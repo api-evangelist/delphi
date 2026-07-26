@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: derived
+source: >-
+  openapi/delphi-openapi.yml, conventions/delphi-conventions.yml,
+  asyncapi/delphi-webhooks.yml — asserted against documented behavior. No
+  published compliance certifications (SOC 2 / ISO 27001 / etc.) were found, so
+  no Compliance pointer is emitted.
+standards:
+  - id: oauth2
+    conforms: false
+    evidence: API-key auth only (x-api-key header); no oauth2 securityScheme.
+  - id: oidc
+    conforms: false
+  - id: rfc9457-problem-details
+    conforms: false
+    evidence: 'Errors are a plain JSON {"error": "..."} envelope, not application/problem+json.'
+  - id: rfc9116-security-txt
+    conforms: false
+    evidence: /.well-known/security.txt returns 404.
+  - id: cursor-pagination
+    conforms: true
+    evidence: GET /v3/users uses opaque cursor pagination (limit/cursor + next_cursor/has_more).
+  - id: server-sent-events
+    conforms: true
+    evidence: POST /v3/stream returns text/event-stream terminated by a [DONE] event.
+  - id: webhooks-hmac-signing
+    conforms: true
+    evidence: Webhook deliveries carry an HMAC signing secret (rotatable, 72h overlap) and unique event ids for dedup.
+  - id: e164-phone-numbers
+    conforms: true
+    evidence: User phone_number fields are in E.164 format.
+  - id: iso8601-timestamps
+    conforms: true
+    evidence: All timestamps are ISO 8601 (e.g. created_at, date_joined).

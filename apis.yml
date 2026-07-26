@@ -1,20 +1,227 @@
 aid: delphi
 name: Delphi
-description: Delphi is a company surfaced as a portfolio company of menlo-ventures and added to the API
-  Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+description: >-
+  Delphi is an AI platform for building "Digital Minds" — hyper-realistic AI
+  clones trained exclusively on a person's own content (podcasts, videos, blogs,
+  long-form writing, live feeds) that match how they speak, write, and think.
+  Audiences can call, text, or video-chat a clone 24/7 for Q&A, coaching,
+  mentorship, and engagement, with omnichannel reach across websites, SMS,
+  Telegram, Slack, and learning platforms like Kajabi and Thinkific. Delphi's
+  v3 REST API (Immortal plan) lets developers embed a Digital Mind directly in
+  their own app: create conversations, stream text and voice responses, manage
+  the audience and its contextual memory, organize contacts with tags, search
+  the clone's knowledge base for RAG, track per-user usage, and receive events
+  via signed webhooks. Delphi is backed by Menlo Ventures.
 url: https://raw.githubusercontent.com/api-evangelist/delphi/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - menlo-ventures
-x-tier: stub
-x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://avatars.githubusercontent.com/u/120126721?v=4
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
-apis: []
+- Artificial Intelligence
+- AI Clones
+- Digital Minds
+- Conversational AI
+- Voice
+- Search
+- RAG
+- Knowledge Base
+- Creator Economy
+- Webhooks
+apis:
+- aid: delphi:delphi-audience-api
+  name: Delphi Audience API
+  description: Store and manage contextual information about users in your audience.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Audience
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-audience-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-clone-api
+  name: Delphi Clone API
+  description: Retrieve your clone's public profile information.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Clone
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-clone-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-conversations-api
+  name: Delphi Conversations API
+  description: Create conversations, stream responses, view history, and manage conversation lifecycle.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Conversations
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-conversations-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-questions-api
+  name: Delphi Questions API
+  description: Retrieve suggested questions configured for your clone.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Questions
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-questions-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-search-api
+  name: Delphi Search API
+  description: Search your clone's digital mind for relevant chunks or content.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Search
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-search-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-tags-api
+  name: Delphi Tags API
+  description: Create tags and organize your audience.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Tags
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-tags-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-usage-api
+  name: Delphi Usage API
+  description: Track consumption metrics and access tiers for your users.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Usage
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-usage-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
+- aid: delphi:delphi-voice-api
+  name: Delphi Voice API
+  description: Stream voice responses and synthesize speech as real-time PCM audio.
+  humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
+  baseURL: https://api.delphi.ai
+  tags:
+  - Voice
+  properties:
+  - type: OpenAPI
+    url: openapi/delphi-voice-api-openapi.yml
+  - type: Authentication
+    url: authentication/delphi-authentication.yml
+  - type: Conventions
+    url: conventions/delphi-conventions.yml
+  - type: ErrorCatalog
+    url: errors/delphi-problem-types.yml
+  - type: Conformance
+    url: conformance/delphi-conformance.yml
+  - type: DataModel
+    url: data-model/delphi-data-model.yml
+  - type: Webhooks
+    url: asyncapi/delphi-webhooks.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -23,3 +230,62 @@ maintainers:
 common:
 - type: Website
   url: https://delphi.ai
+- type: DeveloperPortal
+  url: https://docs.delphi.ai
+- type: Documentation
+  url: https://docs.delphi.ai
+- type: APIReference
+  url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+- type: GettingStarted
+  url: https://docs.delphi.ai/advanced/actions/api-immortal-only
+- type: Authentication
+  url: authentication/delphi-authentication.yml
+- type: Conventions
+  url: conventions/delphi-conventions.yml
+- type: ErrorCatalog
+  url: errors/delphi-problem-types.yml
+- type: Lifecycle
+  url: lifecycle/delphi-lifecycle.yml
+- type: StatusPage
+  url: https://status.delphi.ai
+- type: ChangeLog
+  url: changelog/delphi-changelog.yml
+- type: Conformance
+  url: conformance/delphi-conformance.yml
+- type: DomainSecurity
+  url: security/delphi-domain-security.yml
+- type: AgenticAccess
+  url: agentic-access/delphi-agentic-access.yml
+- type: MCPServer
+  url: mcp/delphi-mcp.yml
+- type: Webhooks
+  url: asyncapi/delphi-webhooks.yml
+- type: LLMsTxt
+  url: llms/delphi-llms.txt
+- type: DataModel
+  url: data-model/delphi-data-model.yml
+- type: Components
+  url: components/delphi-components.yml
+- type: Overlay
+  url: overlays/delphi-overlay.yaml
+- type: AgentSkill
+  url: skills/_index.yml
+- type: Support
+  url: https://docs.delphi.ai
+- type: Blog
+  url: https://delphi.ai/blog
+- type: GitHubOrganization
+  url: https://github.com/delphi-ai
+- type: Pricing
+  url: https://delphi.ai/pricing
+- type: Login
+  url: https://delphi.ai/login
+- type: TermsOfService
+  url: https://delphi.ai/terms
+- type: PrivacyPolicy
+  url: https://delphi.ai/privacy
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

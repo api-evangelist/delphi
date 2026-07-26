@@ -1,0 +1,38 @@
+generated: '2026-07-18'
+method: searched
+source: https://docs.delphi.ai/advanced/integrations
+description: >-
+  Delphi's embeddable, client-side surfaces — the drop-in chat widget you place
+  on your own site and the prebuilt platform integrations that host your Digital
+  Mind elsewhere. Distinct from the server-side v3 REST API in openapi/. Embeds
+  are available on the Builder, Scaler, and Immortal tiers.
+docs:
+  - https://docs.delphi.ai/advanced/integrations
+families:
+  website_embed:
+    description: Embed your Delphi as a chat surface on any website via a copy-paste code snippet.
+    components:
+      - name: Chat Widget / Inline Embed
+        description: Main embed snippet that renders the Delphi chat experience inline on a page.
+      - name: Chat Bubble
+        description: Floating chat-bubble snippet pasted before the closing </body> tag on every page.
+    configuration:
+      - Per-embed Behavior tab (override main Delphi settings per domain/page).
+      - Unique link path required per embed (reusing a path errors).
+      - Website Domain field must match the host, or the embed shows "Configuration Not Found".
+      - Delphi branding removable on the Scaler tier (Style tab).
+  learning_platforms:
+    description: Prebuilt integrations that embed your Delphi inside a course/community platform.
+    components:
+      - { name: Kajabi, description: Add your Delphi to a Kajabi course or community. }
+      - { name: Thinkific, description: Embed your Delphi inside a Thinkific course. }
+      - { name: Mighty Networks, description: Add your Delphi to a Mighty community. }
+  messaging_community:
+    description: Channel integrations that expose your Delphi through messaging surfaces.
+    components:
+      - { name: SMS, description: Give your Delphi a phone number people can text (Immortal tier only). }
+      - { name: Telegram, description: Create a Telegram bot powered by your Delphi (Immortal tier only). }
+      - { name: Slack, description: Connect your Delphi to a Slack workspace (team review, ~48h approval). }
+tier_limits:
+  Builder: 2 integrations
+  Scaler: 10 integrations

@@ -1,0 +1,42 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/delphi-openapi.yml
+description: >-
+  No official hosted/remote Delphi MCP server was found (searched docs.delphi.ai,
+  the delphi-ai GitHub org, and the MCP registry / @modelcontextprotocol npm).
+  This is a CANDIDATE tool list derived one-tool-per-operation from the Delphi
+  v3 OpenAPI, to seed a future MCP server. Not published by Delphi.
+server:
+  name: delphi
+  transport: http
+  url: null
+auth:
+  type: apiKey
+  header: x-api-key
+tools:
+  - { name: create_conversation, description: Start a new conversation with the clone, source_operation: openapi/delphi-openapi.yml#createConversation }
+  - { name: stream_response, description: Send a message and stream the clone's response (SSE), source_operation: openapi/delphi-openapi.yml#streamResponse }
+  - { name: list_conversations, description: List conversations for a user, source_operation: openapi/delphi-openapi.yml#listConversations }
+  - { name: get_conversation_history, description: Get full message history for a conversation, source_operation: openapi/delphi-openapi.yml#getConversationHistory }
+  - { name: update_conversation_title, description: Set or update a conversation title, source_operation: openapi/delphi-openapi.yml#updateConversationTitle }
+  - { name: append_clone_message, description: Append a clone message to a conversation, source_operation: openapi/delphi-openapi.yml#appendCloneMessage }
+  - { name: delete_conversation, description: Soft-delete a conversation, source_operation: openapi/delphi-openapi.yml#deleteConversation }
+  - { name: list_users, description: List audience users (paginated), source_operation: openapi/delphi-openapi.yml#listUsers }
+  - { name: lookup_user, description: Look up a user by email or phone, source_operation: openapi/delphi-openapi.yml#lookupUser }
+  - { name: create_user_info, description: Add contextual info about a user, source_operation: openapi/delphi-openapi.yml#createUserInfo }
+  - { name: get_user_info, description: Get stored info for a user, source_operation: openapi/delphi-openapi.yml#getUserInfo }
+  - { name: update_user_info, description: Update a user info item, source_operation: openapi/delphi-openapi.yml#updateUserInfo }
+  - { name: delete_user_info, description: Delete a user info item, source_operation: openapi/delphi-openapi.yml#deleteUserInfo }
+  - { name: get_clone, description: Get the clone's public profile, source_operation: openapi/delphi-openapi.yml#getClone }
+  - { name: get_questions, description: Get suggested questions for the clone, source_operation: openapi/delphi-openapi.yml#getQuestions }
+  - { name: create_tag, description: Create an audience tag, source_operation: openapi/delphi-openapi.yml#createTag }
+  - { name: list_tags, description: List audience tags, source_operation: openapi/delphi-openapi.yml#listTags }
+  - { name: tag_user, description: Apply a tag to a user, source_operation: openapi/delphi-openapi.yml#tagUser }
+  - { name: untag_user, description: Remove a tag from a user, source_operation: openapi/delphi-openapi.yml#untagUser }
+  - { name: get_user_usage, description: Get a user's usage metrics, source_operation: openapi/delphi-openapi.yml#getUserUsage }
+  - { name: get_user_tier, description: Get a user's access tier, source_operation: openapi/delphi-openapi.yml#getUserTier }
+  - { name: stream_voice_response, description: Stream a spoken clone response as PCM audio, source_operation: openapi/delphi-openapi.yml#streamVoiceResponse }
+  - { name: synthesize_voice, description: Synthesize text to speech in the clone's voice, source_operation: openapi/delphi-openapi.yml#synthesizeVoice }
+  - { name: search_query, description: Semantic/keyword search over the clone's knowledge (RAG), source_operation: openapi/delphi-openapi.yml#searchQuery }
+  - { name: search_content, description: Search knowledge-base content sources, source_operation: openapi/delphi-openapi.yml#searchContent }
