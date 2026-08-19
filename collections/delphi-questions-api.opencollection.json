@@ -1,0 +1,57 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Delphi Audience Questions API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Questions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get questions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/questions",
+            "params": [
+              {
+                "name": "type",
+                "value": "",
+                "type": "query",
+                "description": "Filter by pinned, unpinned, or all questions"
+              },
+              {
+                "name": "count",
+                "value": "",
+                "type": "query",
+                "description": "Number of questions to return (1-100)"
+              },
+              {
+                "name": "randomize",
+                "value": "",
+                "type": "query",
+                "description": "Return questions in random order"
+              }
+            ]
+          },
+          "docs": "Retrieve the suggested questions (conversation starters) configured for your clone."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

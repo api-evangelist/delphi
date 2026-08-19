@@ -1,0 +1,162 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Delphi Audience Conversations API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Conversations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/conversation",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Start a new conversation with your clone. Returns a conversation ID and the clone's initial greeting."
+        },
+        {
+          "info": {
+            "name": "Stream a response",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/stream",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Send a message and receive the clone's response as a real-time stream of Server-Sent Events. The stream ends with a [DONE] event."
+        },
+        {
+          "info": {
+            "name": "List conversations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/conversation/list",
+            "params": [
+              {
+                "name": "email",
+                "value": "",
+                "type": "query",
+                "description": "The user's email address"
+              }
+            ]
+          },
+          "docs": "Retrieve all conversations for a specific user, sorted newest first. Only active (non-deleted) conversations are returned."
+        },
+        {
+          "info": {
+            "name": "Get conversation history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/conversation/:conversation_id/history",
+            "params": [
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the conversation"
+              },
+              {
+                "name": "include_citations",
+                "value": "",
+                "type": "query",
+                "description": "Include source citations"
+              }
+            ]
+          },
+          "docs": "Retrieve the full message history for a conversation, in chronological order (oldest first)."
+        },
+        {
+          "info": {
+            "name": "Update conversation title",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://api.delphi.ai/v3/conversation/:conversation_id/title",
+            "params": [
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Set or update the title of a conversation."
+        },
+        {
+          "info": {
+            "name": "Append a clone message",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/conversation/:conversation_id/append-clone-message",
+            "params": [
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a clone message to an existing conversation. Useful for seeding conversations or injecting a custom clone message mid-conversation."
+        },
+        {
+          "info": {
+            "name": "Delete a conversation",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.delphi.ai/v3/conversation/:conversation_id",
+            "params": [
+              {
+                "name": "conversation_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Soft-delete a conversation. It will no longer appear in list results; the conversation is hidden, not permanently removed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,467 @@
+{
+  "item": [
+    {
+      "id": "d95fc4bd-1512-4480-b03a-bfa6c04c8e28",
+      "name": "Search",
+      "description": {
+        "content": "Search your clone's digital mind for relevant chunks or content.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "a0fb6b68-ea92-4151-90b2-a34d861234cd",
+          "name": "Search chunks",
+          "request": {
+            "name": "Search chunks",
+            "description": {
+              "content": "Search for relevant passages from your clone's digital mind. Supports semantic search, keyword/phrase (BM25) matching, and optional scoping to specific content sources. Powers custom search, RAG pipelines, and content discovery.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "search",
+                "query"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"keywords\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"content\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"contentIds\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"limit\": 10,\n  \"tag\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ea56c214-2cb8-49ef-a338-18049ee9bdd0",
+              "name": "Matching chunks and their content sources",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "search",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": [\n    \"What is your advice on building a startup?\"\n  ],\n  \"keywords\": [\n    \"fundraising\",\n    \"Series A\"\n  ],\n  \"limit\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"chunks\": [\n    {\n      \"text\": \"string\",\n      \"sources\": [\n        {\n          \"contentId\": \"string\",\n          \"title\": \"string\"\n        },\n        {\n          \"contentId\": \"string\",\n          \"title\": \"string\"\n        }\n      ],\n      \"createdTime\": \"1985-07-27T03:55:31.543Z\",\n      \"editedTime\": \"1989-06-08T13:19:25.746Z\"\n    },\n    {\n      \"text\": \"string\",\n      \"sources\": [\n        {\n          \"contentId\": \"string\",\n          \"title\": \"string\"\n        },\n        {\n          \"contentId\": \"string\",\n          \"title\": \"string\"\n        }\n      ],\n      \"createdTime\": \"1968-12-25T19:47:32.562Z\",\n      \"editedTime\": \"2011-05-03T02:25:32.581Z\"\n    }\n  ],\n  \"content\": [\n    {\n      \"contentId\": \"string\",\n      \"title\": \"string\",\n      \"contentType\": \"string\",\n      \"summary\": \"string\",\n      \"metaData\": {},\n      \"createdTime\": \"1981-02-26T22:26:25.117Z\",\n      \"editedTime\": \"1997-02-17T00:51:51.481Z\"\n    },\n    {\n      \"contentId\": \"string\",\n      \"title\": \"string\",\n      \"contentType\": \"string\",\n      \"summary\": \"string\",\n      \"metaData\": {},\n      \"createdTime\": \"1967-06-04T00:24:10.873Z\",\n      \"editedTime\": \"2020-08-19T03:32:19.523Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b46a67c3-798e-4f27-9e19-d6e97e759954",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "search",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": [\n    \"What is your advice on building a startup?\"\n  ],\n  \"keywords\": [\n    \"fundraising\",\n    \"Series A\"\n  ],\n  \"limit\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "751801ec-3a64-425a-b4c7-c95ea32376bd",
+              "name": "Too many requests — 120 requests per 60 seconds per API key exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "search",
+                    "query"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": [\n    \"What is your advice on building a startup?\"\n  ],\n  \"keywords\": [\n    \"fundraising\",\n    \"Series A\"\n  ],\n  \"limit\": 5\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "682e0af6-b973-4e88-be4c-df8784c66bd7",
+          "name": "Search content sources",
+          "request": {
+            "name": "Search content sources",
+            "description": {
+              "content": "Search for content sources (documents, articles, podcasts) in the knowledge base by title or description. Use to discover available content before a chunk search.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "search",
+                "content"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"query\": [\n    \"<string>\",\n    \"<string>\"\n  ],\n  \"tag\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b2237ce2-812c-4d58-8f53-2615ae1b985e",
+              "name": "Matching content sources",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "search",
+                    "content"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": [\n    \"fundraising\",\n    \"startup advice\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"content\": [\n    {\n      \"contentId\": \"string\",\n      \"title\": \"string\",\n      \"contentType\": \"string\",\n      \"summary\": \"string\",\n      \"metaData\": {},\n      \"createdTime\": \"1986-11-07T19:44:57.079Z\",\n      \"editedTime\": \"1976-01-17T02:51:29.231Z\"\n    },\n    {\n      \"contentId\": \"string\",\n      \"title\": \"string\",\n      \"contentType\": \"string\",\n      \"summary\": \"string\",\n      \"metaData\": {},\n      \"createdTime\": \"2014-08-08T18:19:09.805Z\",\n      \"editedTime\": \"1971-10-16T17:26:52.774Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "34a3cc72-412d-4c78-b1c9-a730c079e94b",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "search",
+                    "content"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": [\n    \"fundraising\",\n    \"startup advice\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3afe2721-7f29-4836-948a-fb08c96e4d34",
+              "name": "Too many requests — 120 requests per 60 seconds per API key exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "search",
+                    "content"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"query\": [\n    \"fundraising\",\n    \"startup advice\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.delphi.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e48bc622-35bb-4d36-87fa-d455f2f9b18d",
+    "name": "Delphi Audience Search API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.\n\nContact Support:\n Name: Delphi Support\n Email: support@delphi.ai",
+      "type": "text/plain"
+    }
+  }
+}

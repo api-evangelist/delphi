@@ -1,0 +1,275 @@
+{
+  "item": [
+    {
+      "id": "252b47dd-6d86-4061-b434-b0c9a83a6e91",
+      "name": "Questions",
+      "description": {
+        "content": "Retrieve suggested questions configured for your clone.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "59f34d53-62f7-4724-a5b5-6709b1691cc1",
+          "name": "Get questions",
+          "request": {
+            "name": "Get questions",
+            "description": {
+              "content": "Retrieve the suggested questions (conversation starters) configured for your clone.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "questions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "type",
+                  "value": "pinned",
+                  "description": "Filter by pinned, unpinned, or all questions"
+                },
+                {
+                  "disabled": false,
+                  "key": "count",
+                  "value": "5",
+                  "description": "Number of questions to return (1-100)"
+                },
+                {
+                  "disabled": false,
+                  "key": "randomize",
+                  "value": "false",
+                  "description": "Return questions in random order"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c4b1f3b-88de-4d83-914b-d2547dc75534",
+              "name": "Suggested questions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "pinned"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "randomize",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"questions\": [\n    {\n      \"id\": \"string\",\n      \"index\": 5572,\n      \"question\": \"string\",\n      \"pinned\": true,\n      \"user_edited\": true,\n      \"created_at\": \"1992-01-19T14:20:16.851Z\",\n      \"updated_at\": \"1988-08-17T15:08:44.906Z\"\n    },\n    {\n      \"id\": \"string\",\n      \"index\": 2849,\n      \"question\": \"string\",\n      \"pinned\": false,\n      \"user_edited\": true,\n      \"created_at\": \"1993-06-20T11:48:40.746Z\",\n      \"updated_at\": \"1986-01-26T20:58:53.205Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0657c216-ed4a-402a-accf-d2106bd8be6b",
+              "name": "Missing or invalid API key",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "pinned"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "randomize",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "99b3ad42-8153-4a52-a9ef-4c63b12ce66f",
+              "name": "Too many requests — 120 requests per 60 seconds per API key exceeded",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "questions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "type",
+                      "value": "pinned"
+                    },
+                    {
+                      "key": "count",
+                      "value": "5"
+                    },
+                    {
+                      "key": "randomize",
+                      "value": "false"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: apikey",
+                      "type": "text/plain"
+                    },
+                    "key": "x-api-key",
+                    "value": "<API Key>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://api.delphi.ai",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      {
+        "key": "key",
+        "value": "x-api-key"
+      },
+      {
+        "key": "value",
+        "value": "{{apiKey}}"
+      },
+      {
+        "key": "in",
+        "value": "header"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "695997c7-47d6-4a91-8f0f-ff1f31156da6",
+    "name": "Delphi Audience Questions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The Delphi API lets you integrate your Digital Mind (an AI clone trained on your content) directly into your own app, platform, or workflow. Create conversations, stream text and voice responses, manage your audience and its contextual memory, organize contacts with tags, search your clone's knowledge base for RAG, and track per-user usage. API access is available on the Immortal plan. All endpoints authenticate with an API key passed in the x-api-key header and are scoped to a single clone.\n\nContact Support:\n Name: Delphi Support\n Email: support@delphi.ai",
+      "type": "text/plain"
+    }
+  }
+}

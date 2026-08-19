@@ -1,0 +1,162 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Delphi Audience API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audience",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List users",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/users",
+            "params": [
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Page size (1-1000, default 50)"
+              },
+              {
+                "name": "cursor",
+                "value": "",
+                "type": "query",
+                "description": "Cursor from previous response's next_cursor"
+              },
+              {
+                "name": "active",
+                "value": "",
+                "type": "query",
+                "description": "Filter by active (true) or revoked (false) status"
+              }
+            ]
+          },
+          "docs": "Retrieve a paginated list of all users in your audience. Uses opaque cursor pagination."
+        },
+        {
+          "info": {
+            "name": "Lookup user",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/users/lookup",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Find a user by email or phone number. Exactly one of email or phone_number must be provided."
+        },
+        {
+          "info": {
+            "name": "Get user info",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/users/:user_id/info",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve all stored information for a user, sorted newest first."
+        },
+        {
+          "info": {
+            "name": "Create user info",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/users/:user_id/info",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Add a piece of contextual information about a user. This data is embedded into your clone's memory to personalize responses."
+        },
+        {
+          "info": {
+            "name": "Update user info",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://api.delphi.ai/v3/users/:user_id/info/:info_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "info_id",
+                "value": "",
+                "type": "path"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update a specific piece of information about a user. At least one of info or info_type must be provided. The created_at timestamp is preserved."
+        },
+        {
+          "info": {
+            "name": "Delete user info",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://api.delphi.ai/v3/users/:user_id/info/:info_id",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              },
+              {
+                "name": "info_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Remove a specific piece of information about a user."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

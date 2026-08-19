@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Delphi Audience Search API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Search",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Search chunks",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/search/query",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search for relevant passages from your clone's digital mind. Supports semantic search, keyword/phrase (BM25) matching, and optional scoping to specific content sources. Powers custom search, RAG pipelines, and content discovery."
+        },
+        {
+          "info": {
+            "name": "Search content sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://api.delphi.ai/v3/search/content",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Search for content sources (documents, articles, podcasts) in the knowledge base by title or description. Use to discover available content before a chunk search."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

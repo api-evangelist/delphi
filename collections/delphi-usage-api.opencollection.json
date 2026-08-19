@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Delphi Audience Usage API",
+    "version": "v3"
+  },
+  "request": {
+    "auth": {
+      "type": "apikey",
+      "key": "x-api-key",
+      "value": "{{x-api-key}}",
+      "placement": "header"
+    }
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Usage",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get user usage",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/users/:user_id/usage",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve usage metrics for a specific user, including quotas and remaining allowances for the current billing period."
+        },
+        {
+          "info": {
+            "name": "Get user tier",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://api.delphi.ai/v3/users/:user_id/tier",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "",
+                "type": "path"
+              }
+            ]
+          },
+          "docs": "Retrieve the current access tier for a specific user. Defaults to \"JUST ME\" if no custom tier has been assigned."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
