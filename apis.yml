@@ -77,6 +77,8 @@ apis:
   humanURL: https://docs.delphi.ai/advanced/actions/api-immortal-only
   baseURL: https://api.delphi.ai
   tags:
+  - Audiences
+  tags_raw:
   - Audience
   properties:
   - type: OpenAPI
