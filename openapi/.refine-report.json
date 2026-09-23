@@ -1,14 +1,7 @@
 {
   "provider": "delphi",
   "sources": [
-    "delphi-audience-api-openapi.yml",
-    "delphi-clone-api-openapi.yml",
-    "delphi-conversations-api-openapi.yml",
-    "delphi-questions-api-openapi.yml",
-    "delphi-search-api-openapi.yml",
-    "delphi-tags-api-openapi.yml",
-    "delphi-usage-api-openapi.yml",
-    "delphi-voice-api-openapi.yml"
+    "_original/delphi-openapi.yml"
   ],
   "outputs": [
     "delphi-audience-api-openapi.yml",
@@ -23,6 +16,19 @@
   "archived": [],
   "errors": [],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (1 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "delphi-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
+    "apis.yml register: already-registered"
+  ],
+  "skipped": [
+    "delphi-audience-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-clone-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-conversations-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-questions-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-search-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-tags-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-usage-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "delphi-voice-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }
