@@ -290,13 +290,26 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  responses:
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
     Message:
       type: object
       properties:
@@ -316,21 +329,22 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/Citation'
-    ConversationSummary:
+    ConversationCreated:
       type: object
       properties:
-        id:
+        conversation_id:
           type: string
-        title:
-          type:
-          - string
-          - 'null'
         created_at:
           type: string
           format: date-time
-        medium:
+        initial_message:
           type: string
-          example: API
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
     Citation:
       type: object
       properties:
@@ -364,35 +378,21 @@ components:
           type:
           - string
           - 'null'
-    ConversationCreated:
+    ConversationSummary:
       type: object
       properties:
-        conversation_id:
+        id:
           type: string
+        title:
+          type:
+          - string
+          - 'null'
         created_at:
           type: string
           format: date-time
-        initial_message:
+        medium:
           type: string
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Too many requests — 120 requests per 60 seconds per API key exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
+          example: API
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
