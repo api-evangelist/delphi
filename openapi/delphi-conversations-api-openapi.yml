@@ -310,6 +310,39 @@ components:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
+    Citation:
+      type: object
+      properties:
+        url:
+          type: string
+        text:
+          type: string
+        type:
+          type: string
+          enum:
+          - WEB
+          - PDF
+          - TWITTER
+        title:
+          type:
+          - string
+          - 'null'
+        page_num:
+          type:
+          - number
+          - 'null'
+        timestamp:
+          type:
+          - number
+          - 'null'
+        tweet_id:
+          type:
+          - string
+          - 'null'
+        citation_url:
+          type:
+          - string
+          - 'null'
     Message:
       type: object
       properties:
@@ -345,39 +378,6 @@ components:
         error:
           type: string
           description: Error message
-    Citation:
-      type: object
-      properties:
-        url:
-          type: string
-        text:
-          type: string
-        type:
-          type: string
-          enum:
-          - WEB
-          - PDF
-          - TWITTER
-        title:
-          type:
-          - string
-          - 'null'
-        page_num:
-          type:
-          - number
-          - 'null'
-        timestamp:
-          type:
-          - number
-          - 'null'
-        tweet_id:
-          type:
-          - string
-          - 'null'
-        citation_url:
-          type:
-          - string
-          - 'null'
     ConversationSummary:
       type: object
       properties:

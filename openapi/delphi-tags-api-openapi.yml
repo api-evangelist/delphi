@@ -146,14 +146,14 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
       content:
         application/json:
           schema:
@@ -164,8 +164,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:

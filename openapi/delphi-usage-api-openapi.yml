@@ -78,41 +78,7 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Too many requests — 120 requests per 60 seconds per API key exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    UsageCounters:
-      type: object
-      properties:
-        messages:
-          type: integer
-        voice_seconds:
-          type: number
-        video_seconds:
-          type: number
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
     Usage:
       type: object
       properties:
@@ -133,6 +99,40 @@ components:
           $ref: '#/components/schemas/UsageCounters'
         remaining:
           $ref: '#/components/schemas/UsageCounters'
+    UsageCounters:
+      type: object
+      properties:
+        messages:
+          type: integer
+        voice_seconds:
+          type: number
+        video_seconds:
+          type: number
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -137,25 +137,19 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     RateLimited:
       description: Too many requests — 120 requests per 60 seconds per API key exceeded
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
     Chunk:
       type: object
       properties:
@@ -176,6 +170,12 @@ components:
         editedTime:
           type: string
           format: date-time
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
     Content:
       type: object
       properties:

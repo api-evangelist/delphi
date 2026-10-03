@@ -273,12 +273,6 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
     NotFound:
       description: Resource not found
       content:
@@ -291,52 +285,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   schemas:
-    InfoType:
-      type: string
-      description: Category of a user info item embedded into clone memory.
-      enum:
-      - GOAL
-      - PREFERENCES
-      - INTERESTS
-      - PERSONAL_INFO
-      - EXPERTISE
-      - SITUATION
-      - BELIEF
-      - COMMUNICATION_STYLE
-      - EMOTIONAL_STATE
-      - RELATIONSHIP
-      - WHY_DELPHI
-      - HOW_DELPHI
-      - JOURNAL
-    UserInfoItem:
-      type: object
-      properties:
-        id:
-          type: string
-        text:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        message_id:
-          type:
-          - string
-          - 'null'
-        source:
-          type: string
-          example: API
-        info_type:
-          $ref: '#/components/schemas/InfoType'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
     User:
       type: object
       properties:
@@ -371,6 +326,51 @@ components:
         date_joined:
           type: string
           format: date-time
+    InfoType:
+      type: string
+      description: Category of a user info item embedded into clone memory.
+      enum:
+      - GOAL
+      - PREFERENCES
+      - INTERESTS
+      - PERSONAL_INFO
+      - EXPERTISE
+      - SITUATION
+      - BELIEF
+      - COMMUNICATION_STYLE
+      - EMOTIONAL_STATE
+      - RELATIONSHIP
+      - WHY_DELPHI
+      - HOW_DELPHI
+      - JOURNAL
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+    UserInfoItem:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        message_id:
+          type:
+          - string
+          - 'null'
+        source:
+          type: string
+          example: API
+        info_type:
+          $ref: '#/components/schemas/InfoType'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
