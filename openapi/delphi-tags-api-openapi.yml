@@ -146,8 +146,14 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   responses:
-    NotFound:
-      description: Resource not found
+    Conflict:
+      description: Resource already exists (e.g. duplicate tag name)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
@@ -158,14 +164,8 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Conflict:
-      description: Resource already exists (e.g. duplicate tag name)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:

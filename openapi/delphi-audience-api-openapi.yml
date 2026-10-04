@@ -273,8 +273,8 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   responses:
-    NotFound:
-      description: Resource not found
+    Unauthorized:
+      description: Missing or invalid API key
       content:
         application/json:
           schema:
@@ -285,47 +285,13 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key
+    NotFound:
+      description: Resource not found
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
   schemas:
-    User:
-      type: object
-      properties:
-        user_id:
-          type: string
-          description: UUID of the user
-        email:
-          type:
-          - string
-          - 'null'
-        name:
-          type:
-          - string
-          - 'null'
-        phone_number:
-          type:
-          - string
-          - 'null'
-          description: E.164 format
-        tags:
-          type: array
-          items:
-            type: string
-        tier:
-          type: string
-          enum:
-          - PUBLIC
-          - INTERNAL
-          - PRIVATE
-        active:
-          type: boolean
-        date_joined:
-          type: string
-          format: date-time
     InfoType:
       type: string
       description: Category of a user info item embedded into clone memory.
@@ -371,6 +337,40 @@ components:
           example: API
         info_type:
           $ref: '#/components/schemas/InfoType'
+    User:
+      type: object
+      properties:
+        user_id:
+          type: string
+          description: UUID of the user
+        email:
+          type:
+          - string
+          - 'null'
+        name:
+          type:
+          - string
+          - 'null'
+        phone_number:
+          type:
+          - string
+          - 'null'
+          description: E.164 format
+        tags:
+          type: array
+          items:
+            type: string
+        tier:
+          type: string
+          enum:
+          - PUBLIC
+          - INTERNAL
+          - PRIVATE
+        active:
+          type: boolean
+        date_joined:
+          type: string
+          format: date-time
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
