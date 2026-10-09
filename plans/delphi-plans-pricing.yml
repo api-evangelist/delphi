@@ -1,0 +1,81 @@
+# Pricing transcribed from the provider's own page — see provenance. Numbers are quoted, not derived.
+generated: '2026-10-07'
+method: searched
+source: https://www.delphi.co/pricing
+sources:
+- https://www.delphi.co/pricing
+- https://delphi.ai/pricing
+provenance:
+  tool: all/0-working/economics/harvest_pricing.py
+  run: 20261007T104522
+  grounding: every price_text was found verbatim in the fetched page text
+audience: business-product
+pricing_basis: tiered-subscription
+delivery:
+  delivery: managed
+  method: page
+  read: '2026-10-07'
+published: true
+note: Monthly/Annual toggle noted ('Save up to 20%') but only monthly prices shown. API access only in
+  custom-priced Immortal tier.
+plan_count: 4
+currency: USD
+plans:
+- name: Free
+  price_text: $ 0 per month
+  price: 0
+  currency: USD
+  period: month
+  included_quota: Voice Calling + Chat, 1M Training Words, 40+ Languages
+- name: Builder
+  price_text: $ 79 per month
+  price: 79
+  currency: USD
+  period: month
+  included_quota: Voice Calling + Chat, 5M Training Words, Slack Integration, 2 Embedding Locations
+- name: Scaler
+  price_text: $ 299 per month
+  price: 299
+  currency: USD
+  period: month
+  included_quota: Pro Voice Calling + Chat, 12M Training Words, 10 Embedding Locations
+- name: Immortal
+  price_text: Custom Pricing
+  period: none
+  included_quota: Unlimited Training Words, API Access, SSO
+x-canonical:
+  generated: '2026-10-08'
+  vocabulary: all/0-working/economics/plans-canonical.yml
+  models:
+  - free
+  - subscription
+  units: []
+  plans:
+  - name: Free
+    access: other
+    model: free
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Builder
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Scaler
+    access: other
+    model: subscription
+    model_how: derived
+    units: []
+    periods:
+    - month
+  - name: Immortal
+    access: other
+    model: unstated
+    model_how: derived
+    units: []
+    periods:
+    - none
