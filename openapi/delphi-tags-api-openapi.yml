@@ -145,45 +145,7 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
-  responses:
-    Conflict:
-      description: Resource already exists (e.g. duplicate tag name)
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Too many requests — 120 requests per 60 seconds per API key exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
-    TagMutation:
-      type: object
-      properties:
-        success:
-          type: boolean
-        tag_id:
-          type: string
-        tag_name:
-          type: string
-        user_id:
-          type: string
-        message:
-          type: string
     Error:
       type: object
       properties:
@@ -205,6 +167,44 @@ components:
         updated_at:
           type: string
           format: date-time
+    TagMutation:
+      type: object
+      properties:
+        success:
+          type: boolean
+        tag_id:
+          type: string
+        tag_name:
+          type: string
+        user_id:
+          type: string
+        message:
+          type: string
+  responses:
+    Conflict:
+      description: Resource already exists (e.g. duplicate tag name)
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -272,26 +272,13 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
-  responses:
-    Unauthorized:
-      description: Missing or invalid API key
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Too many requests — 120 requests per 60 seconds per API key exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
   schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
     InfoType:
       type: string
       description: Category of a user info item embedded into clone memory.
@@ -309,34 +296,6 @@ components:
       - WHY_DELPHI
       - HOW_DELPHI
       - JOURNAL
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
-    UserInfoItem:
-      type: object
-      properties:
-        id:
-          type: string
-        text:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        updated_at:
-          type: string
-          format: date-time
-        message_id:
-          type:
-          - string
-          - 'null'
-        source:
-          type: string
-          example: API
-        info_type:
-          $ref: '#/components/schemas/InfoType'
     User:
       type: object
       properties:
@@ -371,6 +330,47 @@ components:
         date_joined:
           type: string
           format: date-time
+    UserInfoItem:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+        message_id:
+          type:
+          - string
+          - 'null'
+        source:
+          type: string
+          example: API
+        info_type:
+          $ref: '#/components/schemas/InfoType'
+  responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey

@@ -79,15 +79,12 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   schemas:
-    UsageCounters:
+    Error:
       type: object
       properties:
-        messages:
-          type: integer
-        voice_seconds:
-          type: number
-        video_seconds:
-          type: number
+        error:
+          type: string
+          description: Error message
     Usage:
       type: object
       properties:
@@ -108,13 +105,22 @@ components:
           $ref: '#/components/schemas/UsageCounters'
         remaining:
           $ref: '#/components/schemas/UsageCounters'
-    Error:
+    UsageCounters:
       type: object
       properties:
-        error:
-          type: string
-          description: Error message
+        messages:
+          type: integer
+        voice_seconds:
+          type: number
+        video_seconds:
+          type: number
   responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid API key
       content:
@@ -123,12 +129,6 @@ components:
             $ref: '#/components/schemas/Error'
     RateLimited:
       description: Too many requests — 120 requests per 60 seconds per API key exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
       content:
         application/json:
           schema:

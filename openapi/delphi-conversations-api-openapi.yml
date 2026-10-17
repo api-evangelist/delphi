@@ -291,35 +291,12 @@ paths:
           $ref: '#/components/responses/RateLimited'
 components:
   schemas:
-    Message:
+    Error:
       type: object
       properties:
-        id:
+        error:
           type: string
-        text:
-          type: string
-        sender:
-          type: string
-          enum:
-          - CLONE
-          - USER
-        created_at:
-          type: string
-          format: date-time
-        citations:
-          type: array
-          items:
-            $ref: '#/components/schemas/Citation'
-    ConversationCreated:
-      type: object
-      properties:
-        conversation_id:
-          type: string
-        created_at:
-          type: string
-          format: date-time
-        initial_message:
-          type: string
+          description: Error message
     Citation:
       type: object
       properties:
@@ -353,12 +330,6 @@ components:
           type:
           - string
           - 'null'
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
     ConversationSummary:
       type: object
       properties:
@@ -374,7 +345,42 @@ components:
         medium:
           type: string
           example: API
+    ConversationCreated:
+      type: object
+      properties:
+        conversation_id:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+        initial_message:
+          type: string
+    Message:
+      type: object
+      properties:
+        id:
+          type: string
+        text:
+          type: string
+        sender:
+          type: string
+          enum:
+          - CLONE
+          - USER
+        created_at:
+          type: string
+          format: date-time
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
   responses:
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
     Unauthorized:
       description: Missing or invalid API key
       content:
@@ -383,12 +389,6 @@ components:
             $ref: '#/components/schemas/Error'
     RateLimited:
       description: Too many requests — 120 requests per 60 seconds per API key exceeded
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    NotFound:
-      description: Resource not found
       content:
         application/json:
           schema:

@@ -113,15 +113,16 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimited'
 components:
+  schemas:
+    Error:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
   responses:
     NotFound:
       description: Resource not found
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/Error'
-    RateLimited:
-      description: Too many requests — 120 requests per 60 seconds per API key exceeded
       content:
         application/json:
           schema:
@@ -132,13 +133,12 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/Error'
-  schemas:
-    Error:
-      type: object
-      properties:
-        error:
-          type: string
-          description: Error message
+    RateLimited:
+      description: Too many requests — 120 requests per 60 seconds per API key exceeded
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
   securitySchemes:
     ApiKeyAuth:
       type: apiKey
