@@ -64,6 +64,146 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Delphi is a company surfaced as a portfolio company of menlo-ventures and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Delphi is an AI platform for building "Digital Minds" — hyper-realistic AI clones trained exclusively on a person's own content (podcasts, videos, blogs, long-form writing, live feeds) that match how they speak, write, and think. Audiences can call, text, or video-chat a clone 24/7 for Q&A, coaching, mentorship, and engagement, with omnichannel reach across websites, SMS, Telegram, Slack, and learning platforms like Kajabi and Thinkific. Delphi's v3 REST API (Immortal plan) lets developers embed a Digital Mind directly in their own app: create conversations, stream text and voice responses, manage the audience and its contextual memory, organize contacts with tags, search the clone's knowledge base for RAG, track per-user usage, and receive events via signed webhooks. Delphi is backed by Menlo Ventures.
 
-Backed by: menlo-ventures — https://delphi.ai
+**Areas:** Company · Artificial Intelligence · AI Clones · Digital Minds · Conversational AI · Voice · Search · RAG · Knowledge Base · Creator Economy · Webhook
+
+## Delphi on APIs.io
+
+Everything profiled for Delphi is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/delphi/](https://apis.io/providers/delphi/)** — or go straight to one of the APIs or properties below.
+
+### APIs (8)
+
+- [Delphi Audience API](https://apis.io/apis/delphi/delphi-audience-api/) — Store and manage contextual information about users in your audience.
+- [Delphi Clone API](https://apis.io/apis/delphi/delphi-clone-api/) — Retrieve your clone's public profile information.
+- [Delphi Conversations API](https://apis.io/apis/delphi/delphi-conversations-api/) — Create conversations, stream responses, view history, and manage conversation lifecycle.
+- [Delphi Questions API](https://apis.io/apis/delphi/delphi-questions-api/) — Retrieve suggested questions configured for your clone.
+- [Delphi Search API](https://apis.io/apis/delphi/delphi-search-api/) — Search your clone's digital mind for relevant chunks or content.
+- [Delphi Tags API](https://apis.io/apis/delphi/delphi-tags-api/) — Create tags and organize your audience.
+- [Delphi Usage API](https://apis.io/apis/delphi/delphi-usage-api/) — Track consumption metrics and access tiers for your users.
+- [Delphi Voice API](https://apis.io/apis/delphi/delphi-voice-api/) — Stream voice responses and synthesize speech as real-time PCM audio.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Delphi Webhooks](https://apis.io/asyncapis/delphi/delphi-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [delphi](https://apis.io/servers/delphi/delphi/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Delphi Agentic Access](https://apis.io/agentic-access/delphi/delphi-agentic-access/)
+
+#### Collections (8)
+
+Postman and Open Collection request collections.
+
+- [Delphi Audience API](https://apis.io/collections/delphi/open-delphi-audience-api/)
+- [Delphi Audience Clone API](https://apis.io/collections/delphi/open-delphi-clone-api/)
+- [Delphi Audience Conversations API](https://apis.io/collections/delphi/open-delphi-conversations-api/)
+- [Delphi Audience Questions API](https://apis.io/collections/delphi/open-delphi-questions-api/)
+- [Delphi Audience Search API](https://apis.io/collections/delphi/open-delphi-search-api/)
+- [Delphi Audience Tags API](https://apis.io/collections/delphi/open-delphi-tags-api/)
+- [Delphi Audience Usage API](https://apis.io/collections/delphi/open-delphi-usage-api/)
+- [Delphi Audience Voice API](https://apis.io/collections/delphi/open-delphi-voice-api/)
+
+#### Overlays (1)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Delphi Overlay](https://apis.io/overlays/delphi/delphi-overlay/)
+
+#### Security (2)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Delphi Authentication](https://apis.io/security/delphi/delphi-authentication/)
+- [Delphi Domain Security](https://apis.io/security/delphi/delphi-domain-security/)
+
+#### Plans and pricing (1)
+
+Published plans, tiers and prices.
+
+- [Delphi Plans Pricing](https://apis.io/plans/delphi/delphi-plans-pricing/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://delphi.ai)
+- [Documentation](https://docs.delphi.ai)
+- [Getting started](https://docs.delphi.ai/advanced/actions/api-immortal-only)
+- [API reference](https://docs.delphi.ai/advanced/actions/api-immortal-only)
+- [Pricing](https://delphi.ai/pricing)
+- [Support](https://docs.delphi.ai)
+- [Blog](https://delphi.ai/blog)
+- [Terms of service](https://delphi.ai/terms)
+- [Privacy policy](https://delphi.ai/privacy)
+- [GitHub](https://github.com/delphi-ai)
+- [Status](https://status.delphi.ai)
+
+## API Evangelist rating
+
+**Kin Score 44.7** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 22.5 |
+| Contract governance | 4.5 |
+| Operational transparency | 42.1 |
+| Developer ergonomics | 58.9 |
+| Access clarity | 69.7 |
+
+**Agent readiness 27.3** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | — |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | derived (partial credit) |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 22.7** — AI & Biometrics
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/delphi/](https://apis.io/providers/delphi/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Delphi: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/delphi/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
